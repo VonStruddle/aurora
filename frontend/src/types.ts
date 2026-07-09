@@ -23,3 +23,16 @@ export interface CompaniesPage {
   page_size: number
   has_more: boolean
 }
+
+export interface TamTier {
+  tier: string
+  label: string
+  gmv: number
+  brand_count: number
+}
+
+export interface TamByTier {
+  total_gmv: number
+  total_brands: number
+  tiers: TamTier[]
+}

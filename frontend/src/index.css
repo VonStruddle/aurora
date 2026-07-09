@@ -249,3 +249,234 @@ button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* --- App shell / left sidebar --- */
+.app-shell {
+  display: flex;
+  min-height: 100vh;
+}
+.sidebar {
+  width: 236px;
+  flex: none;
+  border-right: 1px solid var(--border);
+  padding: 28px 18px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+.sidebar .brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.sidebar h1 {
+  font-size: 1.15rem;
+}
+.side-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.side-link {
+  text-align: left;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-weight: 500;
+  padding: 9px 12px;
+  border-radius: 8px;
+}
+.side-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+.side-link.active {
+  background: var(--accent);
+  color: #fff;
+}
+.content {
+  flex: 1;
+  min-width: 0; /* let wide tables/SVG shrink instead of overflowing the flex row */
+  padding: 40px 32px;
+  max-width: 1180px;
+}
+@media (max-width: 760px) {
+  .app-shell {
+    flex-direction: column;
+  }
+  .sidebar {
+    width: auto;
+    height: auto;
+    position: static;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .side-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .content {
+    padding: 24px 18px;
+  }
+}
+
+/* --- TAM hero --- */
+.hero {
+  margin: 8px 0 20px;
+}
+.hero-num {
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+/* --- Treemap --- */
+.tam {
+  --tam-surface: #16161c;
+  /* Validated ordinal blue ramp (cold -> hot) + neutral gray for Unaware. */
+  --tier-unaware: #4a4946;
+  --tier-aware: #256abf;
+  --tier-interested: #3987e5;
+  --tier-evaluating: #6da7ec;
+  --tier-selecting: #9ec5f4;
+}
+.tree-wrap {
+  position: relative;
+  width: 100%;
+}
+.tree-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.cell {
+  transition: opacity 120ms ease-out;
+}
+.tree-svg g:hover .cell {
+  opacity: 0.88;
+}
+.cell-unaware {
+  fill: var(--tier-unaware);
+}
+.cell-aware {
+  fill: var(--tier-aware);
+}
+.cell-interested {
+  fill: var(--tier-interested);
+}
+.cell-evaluating {
+  fill: var(--tier-evaluating);
+}
+.cell-selecting {
+  fill: var(--tier-selecting);
+}
+.label-plate {
+  fill: var(--tam-surface);
+  opacity: 0.82;
+}
+.label-tier {
+  fill: var(--text);
+  font-size: 17px;
+  font-weight: 700;
+}
+.label-gmv {
+  fill: var(--text);
+  font-size: 14px;
+  font-variant-numeric: tabular-nums;
+}
+.label-share {
+  fill: var(--muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Tooltip */
+.tree-tip {
+  position: absolute;
+  pointer-events: none;
+  min-width: 168px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+  z-index: 5;
+}
+.tip-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+.tip-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: var(--muted);
+}
+.tip-row b {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Swatch (legend/table/tooltip) */
+.swatch {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 3px;
+  vertical-align: baseline;
+  margin-right: 2px;
+}
+.sw-unaware {
+  background: var(--tier-unaware);
+}
+.sw-aware {
+  background: var(--tier-aware);
+}
+.sw-interested {
+  background: var(--tier-interested);
+}
+.sw-evaluating {
+  background: var(--tier-evaluating);
+}
+.sw-selecting {
+  background: var(--tier-selecting);
+}
+
+/* Legend + table view */
+.tam-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 0.9rem;
+}
+.tam-table th,
+.tam-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+.tam-table th {
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+}
+.tam-table .num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.tam-table tbody tr:last-child td {
+  border-bottom: none;
+}

@@ -46,3 +46,19 @@ class CompaniesPage(BaseModel):
     # True when at least one more row exists past this page (avoids counting
     # ~15M rows on every request — we fetch page_size + 1 and check the overflow).
     has_more: bool
+
+
+class TamTier(BaseModel):
+    """Total GMV (TAM) contribution of one SOM tier."""
+
+    tier: str  # unaware | aware | interested | evaluating | selecting
+    label: str
+    gmv: float
+    brand_count: int
+
+
+class TamByTier(BaseModel):
+    total_gmv: float
+    total_brands: int
+    # Ordered along the canonical SOM ladder (cold -> hot).
+    tiers: list[TamTier]

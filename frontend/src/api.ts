@@ -1,4 +1,4 @@
-import type { CompaniesPage, Item } from './types'
+import type { CompaniesPage, Item, TamByTier } from './types'
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
@@ -31,4 +31,6 @@ export const api = {
     fetch(`${BASE}/api/companies?page=${page}&page_size=${pageSize}`).then((r) =>
       handle<CompaniesPage>(r),
     ),
+  tamByTier: () =>
+    fetch(`${BASE}/api/tam/by-tier`).then((r) => handle<TamByTier>(r)),
 }

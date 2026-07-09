@@ -2,11 +2,18 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { api } from './api'
 import type { Item } from './types'
 import CompaniesView from './CompaniesView'
+import TamView from './TamView'
 
-type View = 'items' | 'companies'
+type View = 'tam' | 'companies' | 'items'
+
+const NAV: { id: View; label: string }[] = [
+  { id: 'tam', label: 'TAM by tier' },
+  { id: 'companies', label: 'Companies' },
+  { id: 'items', label: 'Items' },
+]
 
 export default function App() {
-  const [view, setView] = useState<View>('companies')
+  const [view, setView] = useState<View>('tam')
   const [items, setItems] = useState<Item[]>([])
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -59,79 +66,80 @@ export default function App() {
   }
 
   return (
-    <main className={`container ${view === 'companies' ? 'wide' : ''}`}>
-      <header className="header">
-        <h1>Hackathon App</h1>
-        <span
-          className={`badge ${dbOk ? 'ok' : dbOk === false ? 'bad' : ''}`}
-          title="Backend /api/health"
-        >
-          {dbOk === null ? 'checking…' : dbOk ? 'DB connected' : 'DB unavailable'}
-        </span>
-      </header>
+    <div className="app-shell">
+      <aside className="sidebar">
+        <div className="brand">
+          <h1>Hackathon App</h1>
+          <span
+            className={`badge ${dbOk ? 'ok' : dbOk === false ? 'bad' : ''}`}
+            title="Backend /api/health"
+          >
+            {dbOk === null ? '…' : dbOk ? 'DB ok' : 'DB down'}
+          </span>
+        </div>
+        <nav className="side-nav">
+          {NAV.map((n) => (
+            <button
+              key={n.id}
+              className={view === n.id ? 'side-link active' : 'side-link'}
+              onClick={() => setView(n.id)}
+            >
+              {n.label}
+            </button>
+          ))}
+        </nav>
+      </aside>
 
-      <nav className="tabs">
-        <button
-          className={view === 'companies' ? 'tab active' : 'tab'}
-          onClick={() => setView('companies')}
-        >
-          Companies
-        </button>
-        <button
-          className={view === 'items' ? 'tab active' : 'tab'}
-          onClick={() => setView('items')}
-        >
-          Items
-        </button>
-      </nav>
+      <main className="content">
+        {view === 'tam' && <TamView />}
+        {view === 'companies' && <CompaniesView />}
+        {view === 'items' && (
+          <section>
+            <p className="sub">
+              React + FastAPI + Supabase — table{' '}
+              <code>public.hackathon_items</code>
+            </p>
 
-      {view === 'companies' ? (
-        <CompaniesView />
-      ) : (
-        <section>
-          <p className="sub">
-            React + FastAPI + Supabase — table <code>public.hackathon_items</code>
-          </p>
+            <form onSubmit={onAdd} className="card form">
+              <input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="Title"
+                aria-label="Title"
+              />
+              <input
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Description (optional)"
+                aria-label="Description"
+              />
+              <button type="submit">Add item</button>
+            </form>
 
-          <form onSubmit={onAdd} className="card form">
-            <input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Title"
-              aria-label="Title"
-            />
-            <input
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Description (optional)"
-              aria-label="Description"
-            />
-            <button type="submit">Add item</button>
-          </form>
+            {error && <div className="error">{error}</div>}
 
-          {error && <div className="error">{error}</div>}
-
-          {loading ? (
-            <p className="muted">Loading…</p>
-          ) : items.length === 0 ? (
-            <p className="muted">No items yet. Add one above.</p>
-          ) : (
-            <ul className="list">
-              {items.map((it) => (
-                <li key={it.id} className="card item">
-                  <div>
-                    <strong>{it.title}</strong>
-                    {it.description && <p className="muted">{it.description}</p>}
-                  </div>
-                  <button className="ghost" onClick={() => onDelete(it.id)}>
-                    Delete
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      )}
-    </main>
+            {loading ? (
+              <p className="muted">Loading…</p>
+            ) : items.length === 0 ? (
+              <p className="muted">No items yet. Add one above.</p>
+            ) : (
+              <ul className="list">
+                {items.map((it) => (
+                  <li key={it.id} className="card item">
+                    <div>
+                      <strong>{it.title}</strong>
+                      {it.description && <p className="muted">{it.description}</p>}
+                    </div>
+                    <button className="ghost" onClick={() => onDelete(it.id)}>
+                      Delete
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        )}
+      </main>
+    </div>
   )
 }
