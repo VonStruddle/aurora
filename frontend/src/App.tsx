@@ -13,7 +13,7 @@ function landingId(): string | null {
 }
 
 const NAV: { id: View; label: string }[] = [
-  { id: 'beacon', label: 'Beacon' },
+  { id: 'beacon', label: 'Aurora' },
   { id: 'tam', label: 'TAM by tier' },
   { id: 'companies', label: 'Companies' },
 ]

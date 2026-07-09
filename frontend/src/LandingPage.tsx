@@ -1,14 +1,8 @@
 import { useEffect, useState } from 'react'
 import { api } from './api'
 import type { LandingConfig, LandingFeature } from './types'
+import { POLAR_CUSTOMER_LOGOS } from './polar-logos'
 import './landing.css'
-
-const BRANDS = [
-  'Allbirds', 'Jones Road Beauty', 'Gorjana', 'Canopy', 'The Frankie Shop',
-  'Volcom', 'Modular Closets', 'Quad Lock', 'Tiege Hanley', 'YellowPop',
-  'Armra', 'Polène', 'Fashion Eyewear', 'Mud Jeans', 'The Feed', 'Mister Zimi',
-  'Colorful Standard', 'Doen', 'Negative',
-]
 
 const TESTIMONIALS = [
   { quote: 'Polar replaced our entire data stack. We finally have one number everyone trusts.', author: 'Founder', company: 'Fashion DTC Brand', stars: 5 },
@@ -124,8 +118,8 @@ export default function LandingPage({ id }: { id: string }) {
             </div>
             <div className="ticker">
               <div className="ticker-row">
-                {[...BRANDS, ...BRANDS].map((b, i) => (
-                  <span key={i}>{b}</span>
+                {[...POLAR_CUSTOMER_LOGOS, ...POLAR_CUSTOMER_LOGOS].map((b, i) => (
+                  <img key={i} src={b.url} alt={b.name} title={b.name} />
                 ))}
               </div>
             </div>

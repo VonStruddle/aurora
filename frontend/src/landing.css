@@ -235,6 +235,16 @@
   font-size: 14px;
   white-space: nowrap;
 }
+.landing .ticker-row img {
+  height: 28px;
+  width: auto;
+  flex: none;
+  opacity: 0.7;
+  transition: opacity 150ms;
+}
+.landing .ticker-row img:hover {
+  opacity: 1;
+}
 @keyframes lp-scroll {
   to {
     transform: translateX(-50%);

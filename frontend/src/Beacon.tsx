@@ -177,7 +177,7 @@ export default function Beacon() {
             <Flame size={20} {...STROKE} />
           </span>
           <div>
-            <div className="tb-title">Beacon</div>
+            <div className="tb-title">Aurora</div>
             <div className="tb-sub">
               <b>{companies.length} companies</b> · {contactCount} contacts
               {weekOf ? ` · ${weekOf}` : ''}
