@@ -391,6 +391,17 @@ export default function Beacon() {
                       <ExternalLink size={14} {...STROKE} /> Open account in HubSpot
                     </a>
                   </div>
+                  <div className="dr-assets">
+                    <a className="dr-hs" href="#">
+                      <Presentation size={14} {...STROKE} /> Gamma deck
+                    </a>
+                    <a className="dr-hs" href="#">
+                      <Layout size={14} {...STROKE} /> Landing page
+                    </a>
+                    <a className="dr-hs" href="#">
+                      <Mail size={14} {...STROKE} /> HubSpot draft
+                    </a>
+                  </div>
                 </div>
 
                 <div className="dr-count">

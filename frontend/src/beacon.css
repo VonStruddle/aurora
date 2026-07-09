@@ -616,6 +616,12 @@
   gap: 10px;
   margin-top: 16px;
 }
+.beacon .dr-assets {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
 .beacon .dr-hs {
   display: inline-flex;
   align-items: center;
