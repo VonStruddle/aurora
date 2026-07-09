@@ -119,6 +119,7 @@ class BeaconCompany(BaseModel):
     cc: str = ""
     domain: str
     gamma_deck_url: str | None = None
+    landing_id: str | None = None
     signals: list[BeaconSignal] = []
     people: list[BeaconPerson] = []
 
@@ -135,4 +136,14 @@ class BeaconGammaRequest(BaseModel):
 class BeaconGammaResult(BaseModel):
     domain: str
     url: str
+    cached: bool
+
+
+class BeaconLandingRequest(BaseModel):
+    domain: str
+
+
+class BeaconLandingResult(BaseModel):
+    domain: str
+    id: str
     cached: bool

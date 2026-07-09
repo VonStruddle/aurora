@@ -81,6 +81,7 @@ export interface BeaconCompany {
   cc: string
   domain: string
   gamma_deck_url: string | null
+  landing_id: string | null
   signals: BeaconSignal[]
   people: BeaconPerson[]
 }
@@ -89,6 +90,59 @@ export interface BeaconGammaResult {
   domain: string
   url: string
   cached: boolean
+}
+
+export interface BeaconLandingResult {
+  domain: string
+  id: string
+  cached: boolean
+}
+
+// --- Landing page (backported from landing-page-builder/) ---
+export interface LandingPainSolution {
+  pain: string
+  solution: string
+  result: string
+  icon: string
+}
+export interface LandingCaseStudy {
+  brand: string
+  industry: string
+  metric: string
+  value: string
+  quote?: string | null
+  author?: string | null
+  role?: string | null
+}
+export interface LandingFeature {
+  id: string
+  title: string
+  description: string
+  icon: string
+  badge?: string | null
+}
+export interface LandingConfig {
+  company: {
+    name: string
+    industry: string | null
+    estimated_gmv: string | null
+    logo: string | null
+    pain_points: string[] | null
+  }
+  persona: {
+    type: string
+    recipient_name: string | null
+    recipient_title: string | null
+    hero_headline: string
+    hero_subheadline: string
+    hook_text: string
+    pain_solutions: LandingPainSolution[]
+    case_study: LandingCaseStudy
+    closing_outcome: string
+  }
+  core_features: LandingFeature[]
+  spotlight_features: LandingFeature[]
+  contact_url: string
 }
 
 export interface BeaconAccounts {

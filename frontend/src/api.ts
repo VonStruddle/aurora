@@ -1,8 +1,10 @@
 import type {
   BeaconAccounts,
   BeaconGammaResult,
+  BeaconLandingResult,
   CompaniesPage,
   Item,
+  LandingConfig,
   TamByTier,
 } from './types'
 
@@ -47,4 +49,12 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ domain }),
     }).then((r) => handle<BeaconGammaResult>(r)),
+  beaconLanding: (domain: string) =>
+    fetch(`${BASE}/api/beacon/landing`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ domain }),
+    }).then((r) => handle<BeaconLandingResult>(r)),
+  getLanding: (id: string) =>
+    fetch(`${BASE}/api/landings/${id}`).then((r) => handle<LandingConfig>(r)),
 }

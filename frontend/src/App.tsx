@@ -3,8 +3,14 @@ import { api } from './api'
 import CompaniesView from './CompaniesView'
 import TamView from './TamView'
 import Beacon from './Beacon'
+import LandingPage from './LandingPage'
 
 type View = 'beacon' | 'tam' | 'companies'
+
+function landingId(): string | null {
+  const m = window.location.hash.match(/^#\/landing\/(.+)$/)
+  return m ? m[1] : null
+}
 
 const NAV: { id: View; label: string }[] = [
   { id: 'beacon', label: 'Beacon' },
@@ -20,6 +26,7 @@ function initialView(): View {
 }
 
 export default function App() {
+  const [lid, setLid] = useState<string | null>(landingId)
   const [view, setViewState] = useState<View>(initialView)
   const setView = (v: View) => {
     setViewState(v)
@@ -28,11 +35,20 @@ export default function App() {
   const [dbOk, setDbOk] = useState<boolean | null>(null)
 
   useEffect(() => {
+    const onHash = () => setLid(landingId())
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
+  useEffect(() => {
     api
       .health()
       .then((h) => setDbOk(h.database === 'connected'))
       .catch(() => setDbOk(false))
   }, [])
+
+  // Standalone shareable landing route (#/landing/:id) — no app shell.
+  if (lid) return <LandingPage id={lid} />
 
   return (
     <div className="app-shell">

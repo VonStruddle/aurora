@@ -1,0 +1,600 @@
+/* ==========================================================================
+   Personalized landing page — backported from landing-page-builder/.
+   Self-contained, scoped to `.landing`. Navy palette, single blue accent.
+   ========================================================================== */
+.landing {
+  --navy: #0a0f1e;
+  --navy-light: #131929;
+  --navy-card: #1a2235;
+  --blue: #4f6ef7;
+  --blue-light: #6b85ff;
+  --muted: #8892a4;
+  --hair: rgba(255, 255, 255, 0.08);
+  --hair-2: rgba(255, 255, 255, 0.05);
+
+  background: var(--navy);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+.landing * {
+  box-sizing: border-box;
+}
+.landing a {
+  color: inherit;
+  text-decoration: none;
+}
+.landing .wrap {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.landing .wrap-narrow {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.landing .eyebrow {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.landing .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 50rem;
+  background: var(--blue);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 13px 28px;
+  border: none;
+  cursor: pointer;
+  transition: background 150ms;
+}
+.landing .cta:hover {
+  background: var(--blue-light);
+}
+.landing h1,
+.landing h2,
+.landing h3 {
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Header ---------- */
+.landing .lp-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--hair-2);
+  background: rgba(10, 15, 30, 0.9);
+  backdrop-filter: blur(12px);
+}
+.landing .lp-header .bar {
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.landing .brand {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  font-weight: 700;
+  font-size: 18px;
+}
+.landing .brand svg {
+  width: 28px;
+  height: 28px;
+}
+.landing .header-cta {
+  border-radius: 50rem;
+  background: var(--blue);
+  padding: 8px 20px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.landing .header-cta:hover {
+  background: var(--blue-light);
+}
+
+/* ---------- Hero ---------- */
+.landing .lp-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 128px 24px 80px;
+  text-align: center;
+  background: linear-gradient(to bottom, var(--navy-card), var(--navy) 55%);
+}
+.landing .lp-hero .glow {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 400px;
+  max-width: 90vw;
+  background: rgba(79, 110, 247, 0.1);
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.landing .lp-hero .inner {
+  position: relative;
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 22px;
+}
+.landing .hero-hey {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--blue);
+}
+.landing .badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border-radius: 50rem;
+  border: 1px solid var(--hair);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 6px 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.landing .badge-pill .dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--blue);
+  animation: lp-pulse 1.8s ease-in-out infinite;
+}
+@keyframes lp-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+.landing .lp-hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.08;
+}
+.landing .lp-hero .sub {
+  font-size: clamp(1.05rem, 2vw, 1.25rem);
+  color: var(--muted);
+  max-width: 640px;
+}
+.landing .hero-foot {
+  font-size: 12px;
+  color: var(--muted);
+}
+.landing .hero-foot b {
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ---------- Section shells ---------- */
+.landing section {
+  padding: 80px 24px;
+}
+.landing .sec-alt {
+  background: var(--navy-light);
+  border-top: 1px solid var(--hair-2);
+  border-bottom: 1px solid var(--hair-2);
+}
+.landing .sec-head {
+  text-align: center;
+  margin-bottom: 44px;
+}
+.landing .sec-head h2 {
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+  font-weight: 800;
+  margin-top: 10px;
+}
+.landing .sec-head p {
+  color: var(--muted);
+  margin: 12px auto 0;
+  max-width: 560px;
+}
+.landing .card {
+  border-radius: 16px;
+  border: 1px solid var(--hair);
+  background: var(--navy-card);
+  padding: 24px;
+}
+
+/* ---------- Social proof ---------- */
+.landing .lp-social {
+  padding: 64px 24px;
+}
+.landing .ticker {
+  overflow: hidden;
+  margin: 28px 0 40px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+.landing .ticker-row {
+  display: flex;
+  gap: 40px;
+  width: max-content;
+  animation: lp-scroll 32s linear infinite;
+}
+.landing .ticker-row span {
+  color: var(--muted);
+  font-weight: 600;
+  font-size: 14px;
+  white-space: nowrap;
+}
+@keyframes lp-scroll {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.landing .grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+.landing .stars {
+  color: var(--blue);
+  letter-spacing: 2px;
+  font-size: 13px;
+}
+.landing .tst-q {
+  color: #fff;
+  font-size: 14px;
+  margin: 8px 0 12px;
+}
+.landing .tst-a {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* ---------- Personalized hook ---------- */
+.landing .why-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.landing .why-row .line {
+  flex: 1;
+  height: 1px;
+  background: var(--hair);
+}
+.landing .hook-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+  border: 1px solid rgba(79, 110, 247, 0.2);
+  background: linear-gradient(135deg, var(--navy-card), var(--navy-light));
+  padding: 36px;
+}
+.landing .hook-card h2 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.landing .hook-card p {
+  color: var(--muted);
+  font-size: 1.02rem;
+  margin: 0 0 14px;
+}
+.landing .chips {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+}
+.landing .chips .lbl {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+.landing .chips .row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.landing .chip {
+  border-radius: 50rem;
+  border: 1px solid var(--hair);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 5px 12px;
+  font-size: 12px;
+}
+.landing .accent {
+  color: var(--blue);
+}
+
+/* ---------- Pain / solution ---------- */
+.landing .ps-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.landing .ps-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.landing .ps-icon {
+  font-size: 24px;
+}
+.landing .ps-idx {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+}
+.landing .ps-lbl {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 5px;
+}
+.landing .ps-lbl.pain {
+  color: rgba(248, 113, 113, 0.8);
+}
+.landing .ps-lbl.sol {
+  color: var(--blue);
+}
+.landing .ps-pain {
+  color: var(--muted);
+  font-size: 14px;
+}
+.landing .ps-sol {
+  color: #fff;
+  font-size: 14px;
+}
+.landing .ps-div {
+  height: 1px;
+  background: var(--hair);
+}
+.landing .ps-res {
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid var(--hair);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: rgba(74, 222, 128, 0.85);
+}
+
+/* ---------- Product showcase ---------- */
+.landing .grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+.landing .grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+.landing .feat {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 16px;
+  border: 1px solid var(--hair);
+  background: var(--navy-light);
+  padding: 22px;
+}
+.landing .feat.spot {
+  border-color: rgba(79, 110, 247, 0.3);
+  background: linear-gradient(135deg, var(--navy-card), var(--navy-light));
+}
+.landing .feat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.landing .feat-icon {
+  font-size: 24px;
+}
+.landing .feat-badge {
+  border-radius: 50rem;
+  background: rgba(79, 110, 247, 0.1);
+  border: 1px solid rgba(79, 110, 247, 0.25);
+  padding: 2px 9px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--blue);
+}
+.landing .feat h3 {
+  font-size: 14px;
+  font-weight: 600;
+}
+.landing .feat p {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin: 0;
+}
+.landing .spot-div {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 40px 0 24px;
+}
+.landing .spot-div .line {
+  flex: 1;
+  height: 1px;
+  background: var(--hair);
+}
+.landing .spot-div span {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--blue);
+}
+
+/* ---------- Results ---------- */
+.landing .metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.landing .metric {
+  text-align: center;
+}
+.landing .metric .v {
+  font-size: 2rem;
+  font-weight: 800;
+}
+.landing .metric .l {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 0 2px;
+}
+.landing .metric .b {
+  font-size: 11px;
+  color: var(--blue);
+  font-weight: 500;
+}
+.landing .cs-card {
+  border-radius: 16px;
+  border: 1px solid rgba(79, 110, 247, 0.2);
+  background: linear-gradient(135deg, var(--navy-card), var(--navy-light));
+  padding: 36px;
+}
+.landing .cs-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.landing .cs-brand {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+.landing .cs-ind {
+  color: var(--muted);
+  font-size: 13px;
+}
+.landing .cs-val {
+  font-size: 2.4rem;
+  font-weight: 800;
+  text-align: right;
+  line-height: 1;
+}
+.landing .cs-metric {
+  color: var(--muted);
+  font-size: 13px;
+  text-align: right;
+}
+.landing .cs-quote {
+  margin-top: 22px;
+  padding-top: 20px;
+  border-top: 1px solid var(--hair);
+  font-size: 1.1rem;
+}
+.landing .cs-author {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+/* ---------- Closing ---------- */
+.landing .lp-closing {
+  position: relative;
+  overflow: hidden;
+  padding: 96px 24px;
+  text-align: center;
+}
+.landing .lp-closing .glow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 300px;
+  max-width: 90vw;
+  background: rgba(79, 110, 247, 0.1);
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+}
+.landing .lp-closing .inner {
+  position: relative;
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+.landing .lp-closing h2 {
+  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-weight: 800;
+}
+.landing .lp-closing .p {
+  color: var(--muted);
+  font-size: 1.1rem;
+  max-width: 620px;
+}
+.landing .lp-closing .p b {
+  color: #fff;
+  font-weight: 500;
+}
+.landing .trust {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ---------- Footer ---------- */
+.landing .lp-footer {
+  border-top: 1px solid var(--hair-2);
+  padding: 40px 24px;
+}
+.landing .lp-footer .row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.landing .lp-footer .links {
+  display: flex;
+  gap: 22px;
+  font-size: 13px;
+  color: var(--muted);
+  align-items: center;
+}
+.landing .lp-footer .links a:hover {
+  color: #fff;
+}
+
+/* ---------- states ---------- */
+.landing .lp-state {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+@media (max-width: 820px) {
+  .landing .grid-3,
+  .landing .grid-4,
+  .landing .grid-2,
+  .landing .metrics {
+    grid-template-columns: 1fr;
+  }
+  .landing .metrics {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

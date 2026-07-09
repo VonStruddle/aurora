@@ -74,6 +74,10 @@ export default function Beacon() {
   const [deckBusy, setDeckBusy] = useState<string | null>(null)
   const [deckErr, setDeckErr] = useState<string | null>(null)
 
+  // Landing page generation: domain -> landing id
+  const [landings, setLandings] = useState<Record<string, string>>({})
+  const [landingBusy, setLandingBusy] = useState<string | null>(null)
+
   const n = selected.size
   const contactCount = companies.reduce((s, r) => s + r.people.length, 0)
 
@@ -134,6 +138,24 @@ export default function Beacon() {
       setDeckErr((e as Error).message)
     } finally {
       setDeckBusy(null)
+    }
+  }
+
+  function landingHref(id: string) {
+    return `${window.location.origin}${window.location.pathname}#/landing/${id}`
+  }
+
+  async function genLanding(domain: string) {
+    setLandingBusy(domain)
+    setDeckErr(null)
+    try {
+      const res = await api.beaconLanding(domain)
+      setLandings((l) => ({ ...l, [domain]: res.id }))
+      window.open(landingHref(res.id), '_blank', 'noopener')
+    } catch (e) {
+      setDeckErr((e as Error).message)
+    } finally {
+      setLandingBusy(null)
     }
   }
 
@@ -369,6 +391,8 @@ export default function Beacon() {
             const locked = !isSel && n >= MAX
             const deckUrl = decks[r.domain] ?? r.gamma_deck_url
             const deckBusyNow = deckBusy === r.domain
+            const landingIdVal = landings[r.domain] ?? r.landing_id
+            const landingBusyNow = landingBusy === r.domain
             // the champion's HubSpot record (first contact that has one)
             const hsUrl = r.people.find((p) => p.hubspot_url)?.hubspot_url
             return (
@@ -442,9 +466,32 @@ export default function Beacon() {
                         )}
                       </button>
                     )}
-                    <a className="dr-hs" href="#">
-                      <Layout size={14} {...STROKE} /> Landing page
-                    </a>
+                    {landingIdVal ? (
+                      <a
+                        className="dr-hs"
+                        href={landingHref(landingIdVal)}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <Layout size={14} {...STROKE} /> Landing page ›
+                      </a>
+                    ) : (
+                      <button
+                        className="dr-hs"
+                        disabled={landingBusyNow}
+                        onClick={() => genLanding(r.domain)}
+                      >
+                        {landingBusyNow ? (
+                          <>
+                            <span className="spin" /> Generating page…
+                          </>
+                        ) : (
+                          <>
+                            <Layout size={14} {...STROKE} /> Generate landing page
+                          </>
+                        )}
+                      </button>
+                    )}
                     <a className="dr-hs" href="#">
                       <Mail size={14} {...STROKE} /> HubSpot draft
                     </a>

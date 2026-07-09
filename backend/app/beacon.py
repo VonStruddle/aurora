@@ -22,7 +22,7 @@ _PALETTE = [
 _ACCOUNT_COLS = (
     "seed_brand,company_name,domain,tier,industry_cleaned,estimated_employee_count,"
     "signals,in_market_buckets,storeleads__country_code,apollo__country,"
-    "marketing_annual_gmv,gamma_deck_url"
+    "marketing_annual_gmv,gamma_deck_url,landing_id"
 )
 _CONTACT_COLS = (
     "id,parent_domain,full_name,first_name,last_name,job_title,job_function,"
@@ -212,6 +212,7 @@ async def build_beacon_accounts() -> BeaconAccounts:
             cc=acc.get("storeleads__country_code") or "",
             domain=domain,
             gamma_deck_url=acc.get("gamma_deck_url"),
+            landing_id=(str(acc["landing_id"]) if acc.get("landing_id") else None),
             signals=signals,
             people=people,
         )
