@@ -67,6 +67,7 @@ export interface BeaconPerson {
   champion: boolean
   email: string
   phone: string
+  hubspot_url: string | null
   angle: string
 }
 

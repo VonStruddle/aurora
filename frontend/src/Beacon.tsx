@@ -369,6 +369,8 @@ export default function Beacon() {
             const locked = !isSel && n >= MAX
             const deckUrl = decks[r.domain] ?? r.gamma_deck_url
             const deckBusyNow = deckBusy === r.domain
+            // the champion's HubSpot record (first contact that has one)
+            const hsUrl = r.people.find((p) => p.hubspot_url)?.hubspot_url
             return (
               <>
                 <div className="dr-head">
@@ -408,8 +410,14 @@ export default function Beacon() {
                         </>
                       )}
                     </button>
-                    <a className="dr-hs" href="#">
-                      <ExternalLink size={14} {...STROKE} /> Open account in HubSpot
+                    <a
+                      className="dr-hs"
+                      href={hsUrl || '#'}
+                      target={hsUrl ? '_blank' : undefined}
+                      rel="noreferrer"
+                    >
+                      <ExternalLink size={14} {...STROKE} />{' '}
+                      {hsUrl ? 'Open contact in HubSpot' : 'Open in HubSpot'}
                     </a>
                   </div>
                   <div className="dr-assets">
@@ -483,6 +491,19 @@ export default function Beacon() {
                         {p.phone && (
                           <span>
                             <Phone size={13} {...STROKE} /> {p.phone}
+                          </span>
+                        )}
+                        {p.hubspot_url && (
+                          <span>
+                            <ExternalLink size={13} {...STROKE} />
+                            <a
+                              href={p.hubspot_url}
+                              target="_blank"
+                              rel="noreferrer"
+                              style={{ color: 'var(--link)', textDecoration: 'none' }}
+                            >
+                              HubSpot
+                            </a>
                           </span>
                         )}
                       </div>

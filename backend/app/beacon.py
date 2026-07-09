@@ -26,7 +26,7 @@ _ACCOUNT_COLS = (
 )
 _CONTACT_COLS = (
     "id,parent_domain,full_name,first_name,last_name,job_title,job_function,"
-    "department,email,phone,apollo_contacts__sanitized_phone,persona_score"
+    "department,email,phone,apollo_contacts__sanitized_phone,persona_score,hubspot_page"
 )
 
 _TIER_RANK = {"selecting": 4, "evaluating": 3, "interested": 2, "aware": 1}
@@ -194,6 +194,7 @@ async def build_beacon_accounts() -> BeaconAccounts:
                     champion=(idx == 0),
                     email=c.get("email") or "",
                     phone=c.get("phone") or c.get("apollo_contacts__sanitized_phone") or "",
+                    hubspot_url=c.get("hubspot_page"),
                     angle="",
                     # carry the contact id out-of-band for angle assignment
                 )

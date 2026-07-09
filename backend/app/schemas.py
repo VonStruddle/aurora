@@ -105,6 +105,7 @@ class BeaconPerson(BaseModel):
     champion: bool = False
     email: str = ""
     phone: str = ""
+    hubspot_url: str | None = None
     angle: str = ""
 
 
