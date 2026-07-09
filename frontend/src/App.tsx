@@ -12,8 +12,19 @@ const NAV: { id: View; label: string }[] = [
   { id: 'items', label: 'Items' },
 ]
 
+const VIEW_IDS = NAV.map((n) => n.id)
+
+function initialView(): View {
+  const h = window.location.hash.replace('#', '') as View
+  return VIEW_IDS.includes(h) ? h : 'tam'
+}
+
 export default function App() {
-  const [view, setView] = useState<View>('tam')
+  const [view, setViewState] = useState<View>(initialView)
+  const setView = (v: View) => {
+    setViewState(v)
+    window.location.hash = v
+  }
   const [items, setItems] = useState<Item[]>([])
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')

@@ -212,6 +212,32 @@ button.ghost {
   text-align: center;
 }
 
+/* Signal chips in the companies table */
+.sigs {
+  display: inline-flex;
+  flex-wrap: nowrap;
+  gap: 4px;
+  vertical-align: middle;
+}
+.sig.more {
+  color: var(--muted);
+  cursor: default;
+}
+.sig {
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 50rem;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  background: rgba(255, 255, 255, 0.03);
+}
+.sig.hi {
+  color: #b1ffd1;
+  border-color: rgba(177, 255, 209, 0.4);
+  background: rgba(177, 255, 209, 0.08);
+  font-weight: 600;
+}
+
 /* Tier chips */
 .tier {
   font-size: 0.75rem;
@@ -302,7 +328,7 @@ button:disabled {
   flex: 1;
   min-width: 0; /* let wide tables/SVG shrink instead of overflowing the flex row */
   padding: 40px 32px;
-  max-width: 1180px;
+  max-width: 1440px;
 }
 @media (max-width: 760px) {
   .app-shell {

@@ -1,14 +1,15 @@
 from fastapi import APIRouter, HTTPException, Query
 
 from app.schemas import CompaniesPage, CompanyOut
+from app.signals import parse_signals
 from app.snowflake_client import is_snowflake_configured, query_snowflake
 
 router = APIRouter(prefix="/api/companies", tags=["companies"])
 
-# Only the columns the UI shows, plus `tier`.
+# Only the columns the UI shows, plus `tier` and the `signals` object.
 _COLUMNS = (
     "company_name, domain, platform, som_category, tier, "
-    "marketing_gmv_category, industry_cleaned, has_deal"
+    "marketing_gmv_category, industry_cleaned, has_deal, signals"
 )
 
 
@@ -33,10 +34,12 @@ def list_companies(
         [page_size + 1, offset],
     )
     has_more = len(rows) > page_size
-    companies = [
-        CompanyOut(**{k.lower(): v for k, v in row.items()})
-        for row in rows[:page_size]
-    ]
+
+    companies = []
+    for row in rows[:page_size]:
+        fields = {k.lower(): v for k, v in row.items()}
+        fields["signals"] = parse_signals(fields.pop("signals", None))
+        companies.append(CompanyOut(**fields))
     return CompaniesPage(
         companies=companies, page=page, page_size=page_size, has_more=has_more
     )

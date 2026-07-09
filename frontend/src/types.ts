@@ -6,6 +6,13 @@ export interface Item {
   updated_at: string
 }
 
+export interface CompanySignal {
+  key: string
+  label: string
+  last_at: string | null
+  high_intent: boolean
+}
+
 export interface Company {
   company_name: string | null
   domain: string | null
@@ -15,6 +22,7 @@ export interface Company {
   marketing_gmv_category: string | null
   industry_cleaned: string | null
   has_deal: boolean | null
+  signals: CompanySignal[]
 }
 
 export interface CompaniesPage {

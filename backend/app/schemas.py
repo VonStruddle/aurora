@@ -26,6 +26,15 @@ class ItemOut(ItemBase):
     updated_at: datetime
 
 
+class CompanySignal(BaseModel):
+    """One intent/engagement signal family present on a brand."""
+
+    key: str
+    label: str
+    last_at: str | None = None
+    high_intent: bool = False
+
+
 class CompanyOut(BaseModel):
     """One row from internal.marketing.brands (parent brands only)."""
 
@@ -37,6 +46,7 @@ class CompanyOut(BaseModel):
     marketing_gmv_category: str | None = None
     industry_cleaned: str | None = None
     has_deal: bool | None = None
+    signals: list[CompanySignal] = []
 
 
 class CompaniesPage(BaseModel):

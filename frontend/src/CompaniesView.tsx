@@ -54,18 +54,19 @@ export default function CompaniesView() {
               <th>GMV category</th>
               <th>Industry</th>
               <th>Deal</th>
+              <th>Signals</th>
             </tr>
           </thead>
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan={8} className="muted center">
+                <td colSpan={9} className="muted center">
                   Loading… (Snowflake queries can take a few seconds)
                 </td>
               </tr>
             ) : companies.length === 0 ? (
               <tr>
-                <td colSpan={8} className="muted center">
+                <td colSpan={9} className="muted center">
                   No companies on this page.
                 </td>
               </tr>
@@ -104,6 +105,31 @@ export default function CompaniesView() {
                       <span className="badge ok">Yes</span>
                     ) : (
                       <span className="muted">No</span>
+                    )}
+                  </td>
+                  <td>
+                    {c.signals.length === 0 ? (
+                      <span className="muted">—</span>
+                    ) : (
+                      <span className="sigs">
+                        {c.signals.slice(0, 4).map((s) => (
+                          <span
+                            key={s.key}
+                            className={s.high_intent ? 'sig hi' : 'sig'}
+                            title={s.last_at ? `${s.label} · last ${s.last_at}` : s.label}
+                          >
+                            {s.label}
+                          </span>
+                        ))}
+                        {c.signals.length > 4 && (
+                          <span
+                            className="sig more"
+                            title={c.signals.slice(4).map((s) => s.label).join(', ')}
+                          >
+                            +{c.signals.length - 4}
+                          </span>
+                        )}
+                      </span>
                     )}
                   </td>
                 </tr>
