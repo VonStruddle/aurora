@@ -1,0 +1,723 @@
+/* ==========================================================================
+   Beacon — Weekly Hot Accounts
+   Ported from docs/design/beacon.html into a React app.
+   Tokens are a self-contained subset of the Polar design system
+   (knowledge/polar-design-system/colors_and_type.css), scoped to `.beacon`
+   so the build stays dependency-free. Dark by default; `[data-theme="light"]`
+   on the root flips the palette. The drawer lives inside `.beacon`, so it
+   inherits the same tokens.
+   ========================================================================== */
+
+.beacon {
+  --font-sans: "Aeonik", "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Semantic — dark (default) */
+  --bg: #0d0d11;
+  --bg-elev: #16161c;
+  --fg: #ffffff;
+  --fg-muted: #8c8a98;
+  --border: #3b3b54;
+  --primary: #5433fb;
+  --primary-110: #4337fe;
+  --link: #776ef8;
+  --accent: #b1ffd1;
+  --warning: #f87700;
+  --shadow-pop: 0 8px 32px -8px rgba(13, 13, 17, 0.24);
+
+  /* Editorial accents (theme-independent) */
+  --anis-deep: #04ab7d;
+  --anis-bg: rgba(134, 236, 200, 0.2);
+  --lagoon-200: #5bbadf;
+  --lagoon-bg: rgba(91, 186, 223, 0.1);
+  --lilas-200: #cd5bdf;
+  --lilas-bg: rgba(205, 91, 223, 0.1);
+  --pineapple-bg: rgba(226, 223, 130, 0.1);
+  --granit-200: #8c8a98;
+  --granit-bg: rgba(140, 138, 152, 0.1);
+
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.beacon[data-theme="light"] {
+  --bg: #f0f9ff;
+  --bg-elev: #fafbfe;
+  --fg: #303051;
+  --fg-muted: #6c6c9c;
+  --border: #eae9ff;
+  --primary: #5a50fe;
+  --link: #5a50fe;
+  --accent: #04ab7d;
+}
+
+.beacon * {
+  box-sizing: border-box;
+}
+
+/* ---------- Topbar ---------- */
+.beacon .bc-topbar {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg-elev);
+  position: sticky;
+  top: 0;
+  z-index: 30;
+}
+.beacon .tb-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.beacon .flame-badge {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: rgba(248, 119, 0, 0.14);
+  color: var(--warning);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.beacon .tb-title {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+.beacon .tb-sub {
+  font-size: 12.5px;
+  color: var(--fg-muted);
+  margin-top: 1px;
+}
+.beacon .tb-sub b {
+  color: var(--fg);
+  font-weight: 500;
+}
+.beacon .tb-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+.beacon .progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+.beacon .progress .n {
+  color: var(--fg);
+  font-weight: 600;
+  font-feature-settings: "tnum";
+}
+.beacon .pbar {
+  width: 84px;
+  height: 6px;
+  border-radius: 50rem;
+  background: var(--border);
+  overflow: hidden;
+}
+.beacon .pfill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 50rem;
+  transition: width 220ms ease-out;
+}
+
+.beacon .btn-primary {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 16px;
+  font-size: 13.5px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 150ms, transform 80ms, opacity 150ms;
+}
+.beacon .btn-primary:hover:not(:disabled) {
+  background: var(--primary-110);
+}
+.beacon .btn-primary:active:not(:disabled) {
+  transform: scale(0.97);
+}
+.beacon .btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.beacon .theme-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.beacon .theme-btn:hover {
+  color: var(--fg);
+}
+
+/* ---------- Table ---------- */
+.beacon .scroll {
+  flex: 1;
+  padding: 16px 24px 32px;
+}
+.beacon table.lf {
+  width: 100%;
+  border-collapse: collapse;
+}
+.beacon table.lf thead th {
+  text-align: left;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 69px; /* sits below the sticky topbar */
+  background: var(--bg);
+  z-index: 2;
+}
+.beacon table.lf thead th.right {
+  text-align: right;
+}
+.beacon table.lf tbody td {
+  padding: 16px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+.beacon tbody tr.acct {
+  transition: background 150ms;
+  cursor: pointer;
+}
+.beacon tbody tr.acct:hover {
+  background: var(--bg-elev);
+}
+.beacon tbody tr.acct.selected {
+  background: rgba(84, 51, 251, 0.08);
+}
+.beacon tbody tr.acct.selected td:first-child {
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+.beacon tbody tr.acct.locked {
+  opacity: 0.38;
+}
+.beacon tbody tr.acct.locked:hover {
+  background: transparent;
+}
+
+/* Company cell */
+.beacon .company {
+  display: flex;
+  gap: 12px;
+  min-width: 210px;
+}
+.beacon .logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+}
+.beacon .co-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.beacon .co-name {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -0.005em;
+}
+.beacon .heat {
+  display: inline-flex;
+  align-items: center;
+}
+.beacon .heat.hot {
+  color: var(--warning);
+}
+.beacon .heat.warm {
+  color: var(--fg-muted);
+}
+.beacon .co-meta {
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.beacon .cc {
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0 4px;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--fg-muted);
+}
+
+/* Contact cell */
+.beacon .contact {
+  min-width: 210px;
+}
+.beacon .ct-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.beacon .ct-name {
+  font-weight: 500;
+  font-size: 13.5px;
+}
+.beacon .crown {
+  color: var(--accent);
+  display: inline-flex;
+}
+.beacon .plus {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--link);
+  background: rgba(84, 51, 251, 0.12);
+  border-radius: 50rem;
+  padding: 1px 7px;
+}
+.beacon .ct-title {
+  font-size: 12.5px;
+  color: var(--fg);
+  margin-top: 3px;
+}
+.beacon .ct-more {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--link);
+  margin-top: 7px;
+}
+.beacon .ct-more svg {
+  transition: transform 150ms;
+}
+.beacon tr.acct:hover .ct-more svg {
+  transform: translateX(2px);
+}
+
+/* Signals cell */
+.beacon .signals {
+  position: relative;
+}
+.beacon .sig-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 50rem;
+  padding: 4px 10px;
+  font-size: 12.5px;
+  font-weight: 600;
+  font-feature-settings: "tnum";
+  cursor: default;
+  color: var(--fg);
+}
+.beacon .sig-pill svg {
+  color: var(--accent);
+}
+.beacon .sig-pop {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 20;
+  width: 260px;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow-pop);
+  padding: 10px;
+  display: none;
+}
+.beacon .signals:hover .sig-pop {
+  display: block;
+}
+.beacon .sig-pop .sig-line {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 6px;
+  font-size: 12.5px;
+  color: var(--fg);
+}
+.beacon .sig-pop .sig-line svg {
+  flex: none;
+  margin-top: 1px;
+  color: var(--fg-muted);
+}
+.beacon .sig-pop .sig-line em {
+  color: var(--fg-muted);
+  font-style: normal;
+}
+
+/* Sales angle cell */
+.beacon .angle {
+  max-width: 400px;
+}
+.beacon .angle-txt {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.beacon .angle-tag {
+  display: inline-block;
+  margin-bottom: 5px;
+  font-size: 10.5px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--link);
+}
+
+/* Decision cell */
+.beacon .decision {
+  width: 118px;
+}
+.beacon .select-btn {
+  width: 100%;
+  border-radius: 9px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition: all 120ms;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.beacon .select-btn:hover {
+  border-color: var(--link);
+  color: var(--link);
+}
+.beacon tr.selected .select-btn {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.beacon tr.selected .select-btn:hover {
+  background: var(--primary-110);
+}
+.beacon tr.locked .select-btn {
+  cursor: not-allowed;
+}
+.beacon tr.locked .select-btn:hover {
+  border-color: var(--border);
+  color: var(--fg);
+}
+
+/* Orchestration detail row */
+.beacon tr.detailrow > td {
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+.beacon .orch {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 12px 4px 14px;
+  font-size: 12.5px;
+  flex-wrap: wrap;
+}
+.beacon .orch .lead {
+  color: var(--fg-muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.beacon .orch .lead.done {
+  color: var(--accent);
+}
+.beacon .spin {
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--border);
+  border-top-color: var(--link);
+  border-radius: 50%;
+  animation: bc-sp 700ms linear infinite;
+}
+@keyframes bc-sp {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.beacon .asset {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--fg);
+}
+.beacon .asset.done svg {
+  color: var(--accent);
+}
+.beacon .asset.pending {
+  color: var(--fg-muted);
+}
+.beacon .asset a {
+  color: var(--link);
+  text-decoration: none;
+  cursor: pointer;
+}
+.beacon .asset a:hover {
+  text-decoration: underline;
+}
+
+/* Persona tags (shared by table + drawer) */
+.beacon .ptag {
+  font-size: 10px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  padding: 2px 8px;
+  border-radius: 50rem;
+  white-space: nowrap;
+}
+.beacon .ptag.founder {
+  color: var(--link);
+  background: rgba(84, 51, 251, 0.14);
+}
+.beacon .ptag.marketing {
+  color: var(--lagoon-200);
+  background: var(--lagoon-bg);
+}
+.beacon .ptag.ecommerce {
+  color: var(--anis-deep);
+  background: var(--anis-bg);
+}
+.beacon .ptag.retention {
+  color: var(--lilas-200);
+  background: var(--lilas-bg);
+}
+.beacon .ptag.finance {
+  color: var(--warning);
+  background: var(--pineapple-bg);
+}
+.beacon .ptag.data {
+  color: var(--granit-200);
+  background: var(--granit-bg);
+}
+
+/* ---------- Account drawer (inside .beacon → inherits tokens) ---------- */
+.beacon .backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 8, 10, 0.55);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms;
+  z-index: 40;
+}
+.beacon .backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.beacon .drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 100vh;
+  width: 540px;
+  max-width: 94vw;
+  background: var(--bg);
+  color: var(--fg);
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: transform 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+}
+.beacon .drawer.open {
+  transform: none;
+}
+.beacon .dr-head {
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.beacon .dr-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.beacon .dr-name {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+}
+.beacon .dr-close {
+  margin-left: auto;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--fg-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.beacon .dr-close:hover {
+  color: var(--fg);
+}
+.beacon .dr-meta {
+  font-size: 12.5px;
+  color: var(--fg-muted);
+  margin-top: 8px;
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.beacon .dr-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 16px;
+}
+.beacon .dr-hs {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12.5px;
+  color: var(--link);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 8px 12px;
+}
+.beacon .dr-hs:hover {
+  text-decoration: underline;
+}
+.beacon .dr-select {
+  border-radius: 9px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--fg);
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.beacon .dr-select:hover {
+  border-color: var(--link);
+  color: var(--link);
+}
+.beacon .dr-select.on {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #fff;
+}
+.beacon .dr-select.on:hover {
+  background: var(--primary-110);
+  color: #fff;
+}
+.beacon .dr-select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.beacon .dr-count {
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--fg-muted);
+  padding: 18px 24px 2px;
+}
+.beacon .dr-body {
+  overflow: auto;
+  flex: 1;
+  padding: 0 24px 28px;
+}
+.beacon .person {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+.beacon .person:last-child {
+  border-bottom: none;
+}
+.beacon .p-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.beacon .p-name {
+  font-weight: 600;
+  font-size: 14px;
+}
+.beacon .p-crown {
+  color: var(--accent);
+  display: inline-flex;
+}
+.beacon .p-title {
+  font-size: 12.5px;
+  color: var(--fg);
+  margin-top: 3px;
+}
+.beacon .p-contact {
+  display: flex;
+  gap: 14px;
+  margin-top: 9px;
+  font-size: 12px;
+  color: var(--fg-muted);
+  flex-wrap: wrap;
+}
+.beacon .p-contact span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.beacon .p-angle {
+  margin-top: 10px;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--fg-muted);
+  border-left: 2px solid var(--border);
+  padding-left: 11px;
+}
