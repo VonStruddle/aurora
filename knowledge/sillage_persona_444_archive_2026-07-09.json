@@ -1,0 +1,50 @@
+{
+  "_archived_at": "2026-07-09",
+  "_source": "sillage MCP v2 — GET /v2/persona (workspace-scoped, single object)",
+  "_note": "Snapshot taken before upsert_persona full-replace. Sillage has no persona versioning, no delete_persona, and no persona list — upsert_persona is PUT semantics. This file is the only way to restore this state: re-send it verbatim to sillage_v2_upsert_persona (drop the _-prefixed keys and `id`).",
+  "data": {
+    "id": 444,
+    "job_title": [
+      "Founder",
+      "Co-Founder",
+      "Founder & CEO",
+      "Co-Founder & CEO",
+      "CEO",
+      "Chief Executive Officer",
+      "Deputy CEO",
+      "Group CEO",
+      "President",
+      "Owner",
+      "Co-Owner",
+      "Managing Director",
+      "General Manager",
+      "Chief of Staff",
+      "COO",
+      "Chief Operating Officer",
+      "Proprietor",
+      "Principal",
+      "Partner",
+      "Managing Partner",
+      "Founding Partner",
+      "Director (UK-style owner)",
+      "Company Director",
+      "Executive Director",
+      "Chairman",
+      "Chairperson",
+      "Board Member",
+      "Entrepreneur",
+      "Business Owner",
+      "Store Owner",
+      "Brand Owner",
+      "Head of Company"
+    ],
+    "exclude_job_title": null,
+    "location": null,
+    "headcount": ["11-50", "51-200"],
+    "industry": [
+      "Retail, Retail Apparel and Fashion, Retail Luxury Goods and Jewelry, Retail Health and Personal Care Products, Retail Groceries, Personal Care Product Manufacturing, Cosmetics, Food and Beverage Manufacturing, Food and Beverage Services, Wellness and Fitness Services, Apparel Manufacturing, Textile Manufacturing, Footwear Manufacturing, Furniture and Home Furnishings Manufacturing, Household and Institutional Furniture Manufacturing, Home Improvement, Housewares, Consumer Goods, Consumer Services, Sporting Goods Manufacturing, Toy and Game Manufacturing, Beverage Manufacturing, Pharmaceutical Manufacturing (supplements), Tobacco Manufacturing (hemp/CBD adjacent), Security and Investigations (safes/security), Medical Equipment Manufacturing"
+    ],
+    "seniority": null,
+    "additional_info": null
+  }
+}
