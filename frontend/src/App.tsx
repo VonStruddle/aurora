@@ -3,10 +3,12 @@ import { api } from './api'
 import type { Item } from './types'
 import CompaniesView from './CompaniesView'
 import TamView from './TamView'
+import Beacon from './Beacon'
 
-type View = 'tam' | 'companies' | 'items'
+type View = 'beacon' | 'tam' | 'companies' | 'items'
 
 const NAV: { id: View; label: string }[] = [
+  { id: 'beacon', label: 'Beacon' },
   { id: 'tam', label: 'TAM by tier' },
   { id: 'companies', label: 'Companies' },
   { id: 'items', label: 'Items' },
@@ -16,7 +18,7 @@ const VIEW_IDS = NAV.map((n) => n.id)
 
 function initialView(): View {
   const h = window.location.hash.replace('#', '') as View
-  return VIEW_IDS.includes(h) ? h : 'tam'
+  return VIEW_IDS.includes(h) ? h : 'beacon'
 }
 
 export default function App() {
@@ -101,7 +103,8 @@ export default function App() {
         </nav>
       </aside>
 
-      <main className="content">
+      <main className={`content${view === 'beacon' ? ' content-flush' : ''}`}>
+        {view === 'beacon' && <Beacon />}
         {view === 'tam' && <TamView />}
         {view === 'companies' && <CompaniesView />}
         {view === 'items' && (

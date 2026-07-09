@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.config import get_settings
-from app.routers import companies, health, items, snowflake, tam
+from app.routers import beacon, companies, health, items, snowflake, tam
 
 settings = get_settings()
 
@@ -21,6 +21,7 @@ app.include_router(items.router)
 app.include_router(snowflake.router)
 app.include_router(companies.router)
 app.include_router(tam.router)
+app.include_router(beacon.router)
 
 
 @app.get("/")

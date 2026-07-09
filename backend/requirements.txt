@@ -4,3 +4,4 @@ pydantic>=2.7
 pydantic-settings>=2.3
 supabase>=2.9
 snowflake-connector-python>=3.12
+anthropic>=0.40

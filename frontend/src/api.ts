@@ -1,4 +1,4 @@
-import type { CompaniesPage, Item, TamByTier } from './types'
+import type { BeaconAccounts, CompaniesPage, Item, TamByTier } from './types'
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
@@ -33,4 +33,6 @@ export const api = {
     ),
   tamByTier: () =>
     fetch(`${BASE}/api/tam/by-tier`).then((r) => handle<TamByTier>(r)),
+  beaconAccounts: () =>
+    fetch(`${BASE}/api/beacon/accounts`).then((r) => handle<BeaconAccounts>(r)),
 }

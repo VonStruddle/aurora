@@ -330,6 +330,11 @@ button:disabled {
   padding: 40px 32px;
   max-width: 1440px;
 }
+/* Beacon manages its own topbar/padding — render it full-bleed. */
+.content-flush {
+  padding: 0;
+  max-width: none;
+}
 @media (max-width: 760px) {
   .app-shell {
     flex-direction: column;

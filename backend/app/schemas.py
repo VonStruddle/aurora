@@ -72,3 +72,40 @@ class TamByTier(BaseModel):
     total_brands: int
     # Ordered along the canonical SOM ladder (cold -> hot).
     tiers: list[TamTier]
+
+
+# --- Beacon (Weekly Hot Accounts) — shape mirrors app/src/data.ts ---
+
+
+class BeaconSignal(BaseModel):
+    icon: str  # kebab-case lucide name
+    text: str
+    meta: str = ""
+
+
+class BeaconPerson(BaseModel):
+    name: str
+    title: str
+    persona: str  # Founder | Marketing | Ecommerce | Retention | Finance | Data
+    champion: bool = False
+    email: str = ""
+    phone: str = ""
+    angle: str = ""
+
+
+class BeaconCompany(BaseModel):
+    logo: str
+    color: str
+    name: str
+    score: str  # hot | warm
+    sector: str = ""
+    size: str = ""
+    cc: str = ""
+    domain: str
+    signals: list[BeaconSignal] = []
+    people: list[BeaconPerson] = []
+
+
+class BeaconAccounts(BaseModel):
+    week_of: str
+    companies: list[BeaconCompany]

@@ -44,3 +44,46 @@ export interface TamByTier {
   total_brands: number
   tiers: TamTier[]
 }
+
+// --- Beacon (Weekly Hot Accounts) ---
+export type Persona =
+  | 'Founder'
+  | 'Marketing'
+  | 'Ecommerce'
+  | 'Retention'
+  | 'Finance'
+  | 'Data'
+
+export interface BeaconSignal {
+  icon: string
+  text: string
+  meta: string
+}
+
+export interface BeaconPerson {
+  name: string
+  title: string
+  persona: Persona
+  champion: boolean
+  email: string
+  phone: string
+  angle: string
+}
+
+export interface BeaconCompany {
+  logo: string
+  color: string
+  name: string
+  score: 'hot' | 'warm'
+  sector: string
+  size: string
+  cc: string
+  domain: string
+  signals: BeaconSignal[]
+  people: BeaconPerson[]
+}
+
+export interface BeaconAccounts {
+  week_of: string
+  companies: BeaconCompany[]
+}

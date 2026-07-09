@@ -35,9 +35,21 @@ class Settings(BaseSettings):
     snowflake_database: str = ""
     snowflake_schema: str = ""
 
+    # --- Anthropic (Beacon sales-angle generation) ---
+    anthropic_api_key: str = ""
+    anthropic_model: str = "claude-haiku-4-5-20251001"
+
     @property
     def supabase_api_key(self) -> str:
         return self.supabase_service_role_key or self.supabase_key or self.supabase_anon_key
+
+    @property
+    def target_accounts_table(self) -> str:
+        return f"{self.table_prefix}target_accounts"
+
+    @property
+    def target_contacts_table(self) -> str:
+        return f"{self.table_prefix}target_contacts"
 
     @property
     def snowflake_configured(self) -> bool:
