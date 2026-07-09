@@ -39,6 +39,11 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     anthropic_model: str = "claude-haiku-4-5-20251001"
 
+    # --- Gamma (Beacon deck generation via the public Generate API) ---
+    gamma_api_key: str = ""
+    # The hand-built Polar theme in Gamma (see knowledge/.../GAMMA_THEME.md).
+    gamma_theme_id: str = "41qx0nu4jsi7txp"
+
     # --- HubSpot (private-app token; Bearer auth against api.hubapi.com) ---
     hubspot_access_token: str = ""
     hubspot_client_secret: str = ""
@@ -54,6 +59,10 @@ class Settings(BaseSettings):
     @property
     def target_contacts_table(self) -> str:
         return f"{self.table_prefix}target_contacts"
+
+    @property
+    def gamma_configured(self) -> bool:
+        return bool(self.gamma_api_key)
 
     @property
     def snowflake_configured(self) -> bool:

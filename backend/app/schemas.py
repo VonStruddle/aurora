@@ -117,6 +117,7 @@ class BeaconCompany(BaseModel):
     size: str = ""
     cc: str = ""
     domain: str
+    gamma_deck_url: str | None = None
     signals: list[BeaconSignal] = []
     people: list[BeaconPerson] = []
 
@@ -124,3 +125,13 @@ class BeaconCompany(BaseModel):
 class BeaconAccounts(BaseModel):
     week_of: str
     companies: list[BeaconCompany]
+
+
+class BeaconGammaRequest(BaseModel):
+    domain: str
+
+
+class BeaconGammaResult(BaseModel):
+    domain: str
+    url: str
+    cached: bool

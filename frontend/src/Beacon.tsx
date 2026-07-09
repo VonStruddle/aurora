@@ -69,6 +69,11 @@ export default function Beacon() {
   const [drawerIndex, setDrawerIndex] = useState<number | null>(null)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
+  // Gamma deck generation: domain -> url, plus busy/error tracking
+  const [decks, setDecks] = useState<Record<string, string>>({})
+  const [deckBusy, setDeckBusy] = useState<string | null>(null)
+  const [deckErr, setDeckErr] = useState<string | null>(null)
+
   const n = selected.size
   const contactCount = companies.reduce((s, r) => s + r.people.length, 0)
 
@@ -116,6 +121,20 @@ export default function Beacon() {
         1600 + i * 250,
       )
     })
+  }
+
+  async function genDeck(domain: string) {
+    setDeckBusy(domain)
+    setDeckErr(null)
+    try {
+      const res = await api.beaconGamma(domain)
+      setDecks((d) => ({ ...d, [domain]: res.url }))
+      window.open(res.url, '_blank', 'noopener')
+    } catch (e) {
+      setDeckErr((e as Error).message)
+    } finally {
+      setDeckBusy(null)
+    }
   }
 
   // Esc closes the drawer
@@ -348,6 +367,8 @@ export default function Beacon() {
             const r = companies[drawerIndex]
             const isSel = selected.has(drawerIndex)
             const locked = !isSel && n >= MAX
+            const deckUrl = decks[r.domain] ?? r.gamma_deck_url
+            const deckBusyNow = deckBusy === r.domain
             return (
               <>
                 <div className="dr-head">
@@ -392,9 +413,27 @@ export default function Beacon() {
                     </a>
                   </div>
                   <div className="dr-assets">
-                    <a className="dr-hs" href="#">
-                      <Presentation size={14} {...STROKE} /> Gamma deck
-                    </a>
+                    {deckUrl ? (
+                      <a className="dr-hs" href={deckUrl} target="_blank" rel="noreferrer">
+                        <Presentation size={14} {...STROKE} /> Gamma deck ›
+                      </a>
+                    ) : (
+                      <button
+                        className="dr-hs"
+                        disabled={deckBusyNow}
+                        onClick={() => genDeck(r.domain)}
+                      >
+                        {deckBusyNow ? (
+                          <>
+                            <span className="spin" /> Generating deck…
+                          </>
+                        ) : (
+                          <>
+                            <Presentation size={14} {...STROKE} /> Generate Gamma deck
+                          </>
+                        )}
+                      </button>
+                    )}
                     <a className="dr-hs" href="#">
                       <Layout size={14} {...STROKE} /> Landing page
                     </a>
@@ -402,6 +441,17 @@ export default function Beacon() {
                       <Mail size={14} {...STROKE} /> HubSpot draft
                     </a>
                   </div>
+                  {deckErr && deckBusy === null && (
+                    <div
+                      style={{
+                        color: '#f87700',
+                        fontSize: '12px',
+                        marginTop: '8px',
+                      }}
+                    >
+                      Deck generation failed: {deckErr}
+                    </div>
+                  )}
                 </div>
 
                 <div className="dr-count">

@@ -21,7 +21,8 @@ _PALETTE = [
 
 _ACCOUNT_COLS = (
     "seed_brand,company_name,domain,tier,industry_cleaned,estimated_employee_count,"
-    "signals,in_market_buckets,storeleads__country_code,apollo__country,marketing_annual_gmv"
+    "signals,in_market_buckets,storeleads__country_code,apollo__country,"
+    "marketing_annual_gmv,gamma_deck_url"
 )
 _CONTACT_COLS = (
     "id,parent_domain,full_name,first_name,last_name,job_title,job_function,"
@@ -130,6 +131,10 @@ def _persona(*fields: str | None) -> str:
     return "Marketing"
 
 
+# Public alias (used by the gamma endpoint).
+classify_persona = _persona
+
+
 def _num(v: Any) -> float:
     try:
         return float(v)
@@ -205,6 +210,7 @@ async def build_beacon_accounts() -> BeaconAccounts:
             size=str(int(_num(emp))) if emp else "",
             cc=acc.get("storeleads__country_code") or "",
             domain=domain,
+            gamma_deck_url=acc.get("gamma_deck_url"),
             signals=signals,
             people=people,
         )

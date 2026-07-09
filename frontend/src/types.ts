@@ -79,8 +79,15 @@ export interface BeaconCompany {
   size: string
   cc: string
   domain: string
+  gamma_deck_url: string | null
   signals: BeaconSignal[]
   people: BeaconPerson[]
+}
+
+export interface BeaconGammaResult {
+  domain: string
+  url: string
+  cached: boolean
 }
 
 export interface BeaconAccounts {
