@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Spacing" name="Borders & elevation" subtitle="Flat 1px dividers; shadow reserved for pops" viewport="700x180" -->
+<html lang="en"><head><meta charset="utf-8"><title>Borders & elevation</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#0D0D11;color:#fff;font-family:var(--font-sans);padding:22px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+  .card{padding:18px;border-radius:14px;font-size:12px;line-height:1.45;}
+  .card h5{margin:0 0 6px;font-weight:500;font-size:13px;}
+  .muted{color:#8C8A98;font-family:var(--font-mono);font-size:10px;}
+  .a{background:#16161C;border:1px solid #3B3B54;}
+  .b{background:#FAFBFE;color:#303051;border:1px solid #EAE9FF;}
+  .c{background:#16161C;border:1px solid #3B3B54;box-shadow:0 8px 32px -8px rgba(0,0,0,0.6);}
+</style></head><body>
+  <div class="grid">
+    <div class="card a"><h5>Flat, dark</h5><div class="muted">1px #3B3B54<br>radius 14<br>no shadow</div></div>
+    <div class="card b"><h5>Flat, light</h5><div class="muted">1px #EAE9FF<br>radius 14<br>no shadow</div></div>
+    <div class="card c"><h5>Elevated pop</h5><div class="muted">+shadow-pop<br>menus & overlays<br>only</div></div>
+  </div>
+</body></html>

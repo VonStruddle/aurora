@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="KPI card" subtitle="Dashboard metric tile" viewport="700x170" -->
+<html lang="en"><head><meta charset="utf-8"><title>KPI Card</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#0D0D11;color:#fff;font-family:var(--font-sans);padding:22px;}
+  .grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+  .card{background:#16161C;border:1px solid #3B3B54;border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:10px;}
+  .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;font-weight:500;color:#8C8A98;}
+  .v{font-weight:700;font-size:28px;font-feature-settings:"tnum";letter-spacing:-0.02em;}
+  .delta{font-size:12px;font-weight:500;font-feature-settings:"tnum";}
+  .up{color:#B1FFD1;}
+  .down{color:#F92572;}
+  .muted{color:#8C8A98;font-size:11px;}
+</style></head><body>
+  <div class="grid">
+    <div class="card"><span class="eyebrow">Blended CAC</span><span class="v">$58.49</span><span class="delta down">↓ 37% was $42.64</span></div>
+    <div class="card"><span class="eyebrow">Blended ROAS</span><span class="v">18.71x</span><span class="delta up">↑ 42% was 31.99x</span></div>
+    <div class="card"><span class="eyebrow">Blended POAS</span><span class="v">17.19x</span><span class="delta up">↑ 42% was 29.48x</span></div>
+  </div>
+</body></html>

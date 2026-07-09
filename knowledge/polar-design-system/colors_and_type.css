@@ -1,0 +1,291 @@
+/* ===========================================================================
+   POLAR ANALYTICS — COLORS & TYPE
+   Tokens for both base variables (colors, type scale) and semantic usage
+   (h1, h2, body, etc.) Works for dark-primary and light surfaces.
+   =========================================================================== */
+
+/* ---------- Fonts ---------- */
+@font-face {
+  font-family: 'Aeonik';
+  src: url('fonts/Aeonik-Regular.otf') format('opentype');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Aeonik';
+  src: url('fonts/Aeonik-Medium.otf') format('opentype');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Aeonik';
+  src: url('fonts/Aeonik-Bold.otf') format('opentype');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Heldane Display';
+  src: url('fonts/HeldaneDisplay-RegularItalic.otf') format('opentype');
+  font-weight: 400; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Heldane Display';
+  src: url('fonts/HeldaneDisplay-MediumItalic.otf') format('opentype');
+  font-weight: 500; font-style: italic; font-display: swap;
+}
+@font-face {
+  font-family: 'Heldane Display';
+  src: url('fonts/HeldaneDisplay-BoldItalic.otf') format('opentype');
+  font-weight: 700; font-style: italic; font-display: swap;
+}
+/* Open-source fallback */
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-Regular.woff2') format('woff2');
+  font-weight: 400; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-Medium.woff2') format('woff2');
+  font-weight: 500; font-style: normal; font-display: swap;
+}
+@font-face {
+  font-family: 'Inter';
+  src: url('fonts/Inter-Bold.woff2') format('woff2');
+  font-weight: 700; font-style: normal; font-display: swap;
+}
+
+:root {
+  /* ---------- Type stacks ---------- */
+  --font-sans: 'Aeonik', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: 'Heldane Display', Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  /* ---------- Raw palette — Indigo (primary, figma) ---------- */
+  --indigo-100: #C3BFFF;
+  --indigo-200: #918AFF;
+  --indigo-300: #776EF8;   /* accent — links & hover on dark */
+  --indigo-400: #5433FB;   /* PRIMARY DARK — CTA on dark canvas */
+  /* Primary ramp (light mode CTAs, from webflow) */
+  --primary-10:  #EFEDFF;
+  --primary-20:  #DEDCFF;
+  --primary-30:  #CECBFF;
+  --primary-40:  #BDB9FF;
+  --primary-50:  #ACA7FF;
+  --primary-60:  #9C96FE;
+  --primary-70:  #8B85FE;
+  --primary-80:  #7B73FE;
+  --primary-90:  #6B62FE;
+  --primary-100: #5A50FE;  /* PRIMARY LIGHT — CTA on light surfaces */
+  --primary-110: #4337FE;  /* hover / darken */
+
+  /* ---------- Raw palette — Anthracite (neutral dark, figma) ---------- */
+  --anthracite-100: #8C8A98;  /* secondary text on dark */
+  --anthracite-400: #3B3B54;  /* border on dark */
+  --anthracite-500: #252537;
+  --anthracite-600: #22222D;
+  --anthracite-700: #16161C;  /* surface/card on dark */
+  --anthracite-800: #0D0D11;  /* BG-400 — dark canvas */
+  /* aliases for continuity */
+  --anthracite-900: #0D0D11;
+  --anthracite-850: #08080A;  /* abyss */
+  --abyss: #08080A;
+
+  /* ---------- Text ramp (light mode) ---------- */
+  --text-80:  #999FC8;
+  --text-90:  #6C6C9C;  /* secondary text light */
+  --text-100: #4B4B7E;
+  --text-110: #303051;  /* primary text light */
+
+  /* ---------- Gray ramp (neutral light) ---------- */
+  --gray-20: #FCFCFD;
+  --gray-30: #F6F6FB;
+  --gray-40: #EDEFF8;
+  --gray-50: #E2E4F4;
+  --gray-60: #D5D9F0;
+  --gray-70: #C0C4E2;
+  --gray-80: #A9AED4;
+  --gray-90: #8383A9;
+  --gray-100: #646494;
+
+  /* ---------- Light surfaces ---------- */
+  --bg-body:      #F0F9FF;  /* soft bluish-white canvas */
+  --bg-light-10:  #FAFBFE;
+  --bg-light-20:  #F7F8FD;
+  --bg-light-30:  #EFF1FA;
+  --border-light: #EAE9FF;
+  --border-medium:#DAD8FF;
+  --border-dark:  #D3D1FF;
+
+  /* ---------- Editorial accents (figma: Anis / Pineapple / Lilas / Lagoon / Granit) ---------- */
+  --anis:            #B1FFD1;
+  --anis-200:        #82E2C8;
+  --anis-deep:       #04AB7D;
+  --anis-bg:         rgba(134, 236, 200, 0.2);
+  --pineapple:       #FFFB7B;
+  --pineapple-200:   #E2DF82;
+  --pineapple-bg:    rgba(226, 223, 130, 0.1);
+  --lilas:           #F6BFFF;
+  --lilas-200:       #CD5BDF;
+  --lilas-deep:      #BF1AD9;
+  --lilas-bg:        rgba(205, 91, 223, 0.1);
+  --lagoon:          #A4E3FB;
+  --lagoon-200:      #5BBADF;
+  --lagoon-bg:       rgba(91, 186, 223, 0.1);
+  --granit:          #B3B1BF;
+  --granit-200:      #8C8A98;
+  --granit-bg:       rgba(140, 138, 152, 0.1);
+
+  /* ---------- Signal ---------- */
+  --success:   #00BC84;
+  --success-110:#00A574;
+  --error:     #F92572;
+  --error-110: #F4075D;
+  --warning:   #F87700;
+  --warning-110:#EB6300;
+
+  /* ---------- Viz (charts) ---------- */
+  --viz-red:     #F92572;
+  --viz-orange:  #F87700;
+  --viz-yellow:  #F4C620;
+  --viz-green:   #00BC84;
+  --viz-blue:    #3F9FF8;
+  --viz-indigo:  #5A50FE;
+  --viz-magenta: #F038F3;
+
+  /* ---------- Radii / spacing ---------- */
+  --radius-4:  0.25rem;
+  --radius-6:  0.375rem;
+  --radius-8:  0.5rem;
+  --radius-12: 0.75rem;
+  --radius-16: 1rem;
+  --radius-20: 1.25rem;
+  --radius-pill: 50rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 80px;
+  --space-10: 120px;
+
+  /* ---------- Elevation ---------- */
+  --shadow-card-light: 0 1px 2px rgba(48,48,81,0.04), 0 1px 0 rgba(234,233,255,0.9);
+  --shadow-pop: 0 8px 32px -8px rgba(13,13,17,0.24);
+  --border-dark: 1px solid var(--anthracite-500);
+  --border-light-hair: 1px solid var(--border-light);
+
+  /* ---------- Semantic: DARK surface (default) ---------- */
+  --bg:        var(--anthracite-800);
+  --bg-elev:   var(--anthracite-700);
+  --fg:        #FFFFFF;
+  --fg-muted:  var(--anthracite-100);
+  --border:    var(--anthracite-400);
+  --primary:   var(--indigo-400);
+  --link:      var(--indigo-300);
+  --accent:    var(--anis);
+}
+
+/* Opt-in light surface */
+.theme-light,
+[data-theme="light"] {
+  --bg:       var(--bg-body);
+  --bg-elev:  var(--bg-light-10);
+  --fg:       var(--text-110);
+  --fg-muted: var(--text-90);
+  --border:   var(--border-light);
+  --primary:  var(--primary-100);
+  --link:     var(--primary-100);
+  --accent:   var(--anis-deep);
+}
+
+/* ---------- Base + Semantic type ---------- */
+html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.55;
+  color: var(--fg);
+  background: var(--bg);
+  font-feature-settings: "ss01", "ss02"; /* Aeonik stylistic sets */
+}
+
+h1, .h1 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(40px, 4.5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+h2, .h2 {
+  font-weight: 700;
+  font-size: clamp(32px, 3.2vw, 48px);
+  line-height: 1.1;
+  letter-spacing: -0.018em;
+  margin: 0;
+}
+h3, .h3 {
+  font-weight: 500;
+  font-size: clamp(24px, 2.2vw, 32px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+h4, .h4 {
+  font-weight: 500;
+  font-size: 22px;
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  margin: 0;
+}
+h5, .h5 {
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.35;
+  margin: 0;
+}
+p, .body {
+  font-size: 16px;
+  line-height: 1.55;
+  margin: 0;
+}
+.body-lg { font-size: 17px; line-height: 1.55; }
+.body-sm { font-size: 15px; line-height: 1.5; }
+.caption { font-size: 13px; line-height: 1.45; color: var(--fg-muted); }
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--indigo-300);
+}
+
+.serif-italic, em.display, .display-italic {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+}
+
+/* Tabular figures for KPIs */
+.figure-display {
+  font-family: var(--font-sans);
+  font-feature-settings: "tnum";
+  font-weight: 700;
+  font-size: 48px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.figure-display.serif {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+}
+
+code, .mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
