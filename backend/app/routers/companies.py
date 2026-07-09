@@ -18,7 +18,8 @@ def list_companies(
     page_size: int = Query(25, ge=1, le=100),
 ):
     """Parent brands from internal.marketing.brands (domain = parent_domain),
-    paginated. Ordered by domain for stable paging across requests."""
+    paginated. Ordered by annual GMV (desc); domain_id is a stable tiebreaker
+    for consistent paging across requests."""
     if not is_snowflake_configured():
         raise HTTPException(status_code=503, detail="Snowflake is not configured.")
 
@@ -27,7 +28,7 @@ def list_companies(
     rows = query_snowflake(
         f"SELECT {_COLUMNS} FROM internal.marketing.brands "
         "WHERE domain = parent_domain "
-        "ORDER BY domain, domain_id "
+        "ORDER BY marketing_annual_gmv DESC NULLS LAST, domain_id "
         "LIMIT ? OFFSET ?",
         [page_size + 1, offset],
     )
