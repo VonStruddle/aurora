@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Colors" name="Color · Accent & semantic" subtitle="Anis, success, error, warning, link" viewport="700x160" -->
+<html lang="en"><head><meta charset="utf-8"><title>Color — Semantic + Accent</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:var(--anthracite-900);color:#fff;font-family:var(--font-sans);}
+  .wrap{padding:20px;}
+  .row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;}
+  .sw{aspect-ratio:1.6/1;border-radius:10px;display:flex;flex-direction:column;justify-content:flex-end;padding:10px 12px;font-size:11px;line-height:1.2;border:1px solid rgba(255,255,255,0.06);}
+  .sw .hex{opacity:0.7;font-family:var(--font-mono);font-size:10px;margin-top:2px;}
+  .sw .name{font-weight:500;font-size:12px;}
+  .sw .role{opacity:0.7;font-size:10px;text-transform:uppercase;letter-spacing:0.12em;}
+</style></head><body><div class="wrap">
+  <div class="row">
+    <div class="sw" style="background:#B1FFD1;color:#04AB7D"><span class="role">Anis</span><span class="name">Accent</span><span class="hex">#B1FFD1</span></div>
+    <div class="sw" style="background:#00BC84;color:#fff"><span class="role">Success</span><span class="name">Positive</span><span class="hex">#00BC84</span></div>
+    <div class="sw" style="background:#F92572;color:#fff"><span class="role">Error</span><span class="name">Negative</span><span class="hex">#F92572</span></div>
+    <div class="sw" style="background:#F87700;color:#fff"><span class="role">Warning</span><span class="name">Caution</span><span class="hex">#F87700</span></div>
+    <div class="sw" style="background:#776EF8;color:#fff"><span class="role">Indigo 300</span><span class="name">Link</span><span class="hex">#776EF8</span></div>
+  </div>
+</div></body></html>

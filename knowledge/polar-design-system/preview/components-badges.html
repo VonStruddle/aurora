@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Badges & pills" subtitle="Delta, status, filter chips" viewport="700x180" -->
+<html lang="en"><head><meta charset="utf-8"><title>Badges & pills</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#0D0D11;color:#fff;font-family:var(--font-sans);padding:24px;}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;}
+  .pill{padding:5px 12px;border-radius:50rem;font-size:12px;font-weight:500;line-height:1.4;}
+  .anis{background:rgba(177,255,209,0.12);color:#B1FFD1;}
+  .indigo{background:rgba(84,51,251,0.18);color:#C3BFFF;}
+  .error{background:rgba(249,37,114,0.15);color:#F92572;}
+  .warn{background:rgba(248,119,0,0.15);color:#F87700;}
+  .neutral{background:#22222D;color:#8C8A98;}
+  .ghost{border:1px solid #3B3B54;color:#fff;background:transparent;}
+  .dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:6px;vertical-align:middle;}
+</style></head><body>
+  <div class="row">
+    <span class="pill anis"><span class="dot" style="background:#B1FFD1"></span>+42% ROAS</span>
+    <span class="pill error"><span class="dot" style="background:#F92572"></span>-37% CAC</span>
+    <span class="pill warn">Inventory low</span>
+    <span class="pill neutral">Last 30 days</span>
+  </div>
+  <div class="row">
+    <span class="pill indigo">Beta</span>
+    <span class="pill anis">New</span>
+    <span class="pill ghost">Meta Ads</span>
+    <span class="pill ghost">Shopify</span>
+    <span class="pill ghost">Klaviyo</span>
+  </div>
+</body></html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Components" name="Buttons" subtitle="Primary / secondary / ghost" viewport="700x220" -->
+<html lang="en"><head><meta charset="utf-8"><title>Buttons — dark</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#0D0D11;color:#fff;font-family:var(--font-sans);padding:28px;}
+  .row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:14px;align-items:center;}
+  .btn{font-family:var(--font-sans);font-weight:500;font-size:15px;padding:12px 22px;border-radius:10px;border:none;cursor:pointer;transition:background 150ms ease-out;}
+  .primary{background:#5433FB;color:#fff;}
+  .primary:hover{background:#4337FE;}
+  .secondary{background:transparent;color:#fff;border:1px solid #3B3B54;}
+  .ghost{background:transparent;color:#776EF8;padding:12px 4px;}
+  .ghost:hover{text-decoration:underline;}
+  .sm{font-size:13px;padding:8px 14px;border-radius:8px;}
+  .lbl{color:#8C8A98;font-size:11px;text-transform:uppercase;letter-spacing:0.12em;width:80px;}
+</style></head><body>
+  <div class="row"><span class="lbl">Primary</span><button class="btn primary">Book a demo</button><button class="btn primary sm">Start free</button></div>
+  <div class="row"><span class="lbl">Secondary</span><button class="btn secondary">Talk to sales</button><button class="btn secondary sm">Learn more</button></div>
+  <div class="row"><span class="lbl">Ghost</span><button class="btn ghost">Read the docs →</button></div>
+</body></html>

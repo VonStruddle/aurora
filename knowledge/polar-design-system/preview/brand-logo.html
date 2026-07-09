@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Logo variants" subtitle="One-word lockup on dark & light" viewport="700x220" -->
+<html lang="en"><head><meta charset="utf-8"><title>Logo — variants</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#0D0D11;color:#fff;font-family:var(--font-sans);}
+  .grid{display:grid;grid-template-columns:1fr 1fr;min-height:220px;}
+  .pane{padding:28px;display:flex;flex-direction:column;justify-content:center;gap:12px;}
+  .dark{background:#0D0D11;border-right:1px solid #3B3B54;}
+  .light{background:#F0F9FF;}
+  .symbol{width:56px;height:56px;border-radius:14px;}
+  .cap{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:#8C8A98;font-weight:500;}
+  .light .cap{color:#6C6C9C;}
+  .mark{display:flex;align-items:center;gap:12px;}
+  .word{font-weight:700;font-size:28px;letter-spacing:-0.02em;color:#fff;}
+  .light .word{color:#303051;}
+</style></head><body>
+  <div class="grid">
+    <div class="pane dark">
+      <span class="cap">One-word lockup · Dark</span>
+      <div class="mark"><img class="symbol" src="../assets/logo-symbol.png"><span class="word">Polar</span></div>
+    </div>
+    <div class="pane light">
+      <span class="cap">One-word lockup · Light</span>
+      <div class="mark"><img class="symbol" src="../assets/logo-symbol.png"><span class="word">Polar</span></div>
+    </div>
+  </div>
+</body></html>

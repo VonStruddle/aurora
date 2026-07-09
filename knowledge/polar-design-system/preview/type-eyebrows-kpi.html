@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Type" name="Type · Eyebrows & KPIs" subtitle="Uppercase 0.12em + tabular numerals" viewport="700x230" -->
+<html lang="en"><head><meta charset="utf-8"><title>Type — Eyebrows & labels</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<style>
+  html,body{margin:0;background:#0D0D11;color:#fff;font-family:var(--font-sans);padding:28px;}
+  .eyebrow{font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:0.12em;}
+  .indigo{color:#776EF8;}
+  .anis{color:#B1FFD1;}
+  .muted{color:#8C8A98;}
+  .row{display:flex;flex-wrap:wrap;gap:28px;margin-bottom:18px;}
+  .kpi{display:flex;flex-direction:column;gap:4px;}
+  .kpi .v{font-weight:700;font-size:32px;font-feature-settings:"tnum";letter-spacing:-0.02em;}
+  .delta{font-size:11px;font-weight:500;font-feature-settings:"tnum";}
+  .up{color:#B1FFD1;}
+  .down{color:#F92572;}
+</style></head><body>
+  <div class="row">
+    <span class="eyebrow indigo">Blended CAC</span>
+    <span class="eyebrow anis">Positive delta</span>
+    <span class="eyebrow muted">Updated 2 min ago</span>
+  </div>
+  <div class="row">
+    <div class="kpi"><span class="eyebrow muted">BLENDED CAC</span><span class="v">$58.49</span><span class="delta down">↓ 37% · was $42.64</span></div>
+    <div class="kpi"><span class="eyebrow muted">BLENDED ROAS</span><span class="v">18.71x</span><span class="delta up">↑ 42% · was 31.99x</span></div>
+    <div class="kpi"><span class="eyebrow muted">BLENDED POAS</span><span class="v">17.19x</span><span class="delta up">↑ 42% · was 29.48x</span></div>
+  </div>
+</body></html>

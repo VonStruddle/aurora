@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- @dsCard group="Brand" name="Iconography (Lucide)" subtitle="Substituted set — flag for review" viewport="700x200" -->
+<html lang="en"><head><meta charset="utf-8"><title>Iconography — Lucide substitution</title>
+<link rel="stylesheet" href="../colors_and_type.css">
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<style>
+  html,body{margin:0;background:#0D0D11;color:#fff;font-family:var(--font-sans);padding:24px;}
+  .row{display:flex;gap:22px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+  .icon{width:40px;height:40px;border:1px solid #3B3B54;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#fff;}
+  .icon svg{width:20px;height:20px;}
+  .note{color:#8C8A98;font-size:12px;max-width:420px;line-height:1.5;}
+  .tag{font-size:11px;text-transform:uppercase;letter-spacing:0.12em;color:#776EF8;font-weight:500;}
+</style></head><body>
+  <div class="tag">Substituted — Lucide · 1.5px · rounded</div>
+  <div class="row" style="margin-top:14px">
+    <span class="icon"><i data-lucide="trending-up"></i></span>
+    <span class="icon"><i data-lucide="activity"></i></span>
+    <span class="icon"><i data-lucide="bell"></i></span>
+    <span class="icon"><i data-lucide="sparkles"></i></span>
+    <span class="icon"><i data-lucide="database"></i></span>
+    <span class="icon"><i data-lucide="zap"></i></span>
+    <span class="icon"><i data-lucide="filter"></i></span>
+    <span class="icon"><i data-lucide="settings"></i></span>
+  </div>
+  <p class="note">No branded icon font exists in the Webflow codebase. Lucide matches the 1.5px stroke and rounded-cap language of Polar's product illustrations. Flag to brand team to formalize or license custom.</p>
+  <script>lucide.createIcons();</script>
+</body></html>
