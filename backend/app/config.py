@@ -23,9 +23,27 @@ class Settings(BaseSettings):
     # Prefix applied to this project's tables in the shared `public` schema.
     table_prefix: str = "hackathon_"
 
+    # --- Snowflake (JWT key-pair auth; ported from ../aurora) ---
+    snowflake_account: str = ""
+    snowflake_user: str = ""
+    # PEM-encoded private key. May contain literal `\n` (single-line env); the
+    # client normalizes those back to real newlines before parsing.
+    snowflake_private_key: str = ""
+    snowflake_private_key_passphrase: str = ""
+    snowflake_role: str = ""
+    snowflake_warehouse: str = ""
+    snowflake_database: str = ""
+    snowflake_schema: str = ""
+
     @property
     def supabase_api_key(self) -> str:
         return self.supabase_service_role_key or self.supabase_key or self.supabase_anon_key
+
+    @property
+    def snowflake_configured(self) -> bool:
+        return bool(
+            self.snowflake_account and self.snowflake_user and self.snowflake_private_key
+        )
 
     @property
     def items_table(self) -> str:

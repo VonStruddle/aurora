@@ -1,4 +1,4 @@
-import type { Item } from './types'
+import type { CompaniesPage, Item } from './types'
 
 const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
@@ -26,5 +26,9 @@ export const api = {
   deleteItem: (id: string) =>
     fetch(`${BASE}/api/items/${id}`, { method: 'DELETE' }).then((r) =>
       handle<void>(r),
+    ),
+  listCompanies: (page: number, pageSize: number) =>
+    fetch(`${BASE}/api/companies?page=${page}&page_size=${pageSize}`).then((r) =>
+      handle<CompaniesPage>(r),
     ),
 }

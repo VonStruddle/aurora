@@ -24,3 +24,25 @@ class ItemOut(ItemBase):
     id: uuid.UUID
     created_at: datetime
     updated_at: datetime
+
+
+class CompanyOut(BaseModel):
+    """One row from internal.marketing.brands (parent brands only)."""
+
+    company_name: str | None = None
+    domain: str | None = None
+    platform: str | None = None
+    som_category: str | None = None
+    tier: str | None = None
+    marketing_gmv_category: str | None = None
+    industry_cleaned: str | None = None
+    has_deal: bool | None = None
+
+
+class CompaniesPage(BaseModel):
+    companies: list[CompanyOut]
+    page: int
+    page_size: int
+    # True when at least one more row exists past this page (avoids counting
+    # ~15M rows on every request — we fetch page_size + 1 and check the overflow).
+    has_more: bool

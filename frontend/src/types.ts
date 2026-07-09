@@ -5,3 +5,21 @@ export interface Item {
   created_at: string
   updated_at: string
 }
+
+export interface Company {
+  company_name: string | null
+  domain: string | null
+  platform: string | null
+  som_category: string | null
+  tier: string | null
+  marketing_gmv_category: string | null
+  industry_cleaned: string | null
+  has_deal: boolean | null
+}
+
+export interface CompaniesPage {
+  companies: Company[]
+  page: number
+  page_size: number
+  has_more: boolean
+}
