@@ -1,25 +1,65 @@
-# app/ — Weekly Hot Accounts (owner : Hugo)
+# app/ — Beacon (Weekly Hot Accounts) · owner: Hugo
 
-App interne Sales de Polar Analytics : surface + orchestrateur du flow GTM.
-Voir le plan complet dans [`docs/app-plan.md`](../docs/app-plan.md).
+Internal Sales app for Polar Analytics: the surface + orchestrator of the weekly
+GTM ritual. An AE opens **Beacon** on Monday, sees their ~10 hottest accounts,
+understands *why* each is hot, selects **5**, and pushes them into orchestration
+(Gamma deck + landing page + HubSpot draft).
 
-## Écrans
-1. **Weekly Review** `/` — top 10 comptes chauds (score + signaux + contexte), sélection du **top 5**, CTA "Activer".
-2. **Account Workspace** `/account/[id]` — la fiche qui "s'allume" : contacts (Sillage + FullEnrich, SLA 5/5), use cases par persona, assets (deck Gamma, landing page, draft HubSpot), timeline d'orchestration.
-3. **Pipeline** `/pipeline` *(nice-to-have)* — vue manager (SLA, assets prêts, drafts à review).
+Full product plan: [`../docs/app-plan.md`](../docs/app-plan.md).
+Design source (static hi-fi mock): [`../docs/design/beacon.html`](../docs/design/beacon.html).
 
-## Orchestration
-Au clic **"Activer"** → people mapping (Sillage) → enrichissement (FullEnrich) → triggers Gamma / Landing / HubSpot.
+## Run it
+
+```bash
+cd app
+npm install
+npm run dev        # http://localhost:5174
+```
+
+Build / typecheck: `npm run build` · Preview a build: `npm run preview`.
+
+> Runs on port **5174** so it can sit alongside the data-explorer in
+> [`../frontend`](../frontend) (port 5173) without clashing.
 
 ## Stack
-- Next.js (App Router) + TypeScript + Tailwind
-- Supabase (tables Company + Signals live via Quentin ; + `selected_accounts`, `contacts`, `use_cases`, `assets`, `tasks`)
-- Design system Polar (tokens à intégrer — en attente de Quentin)
 
-## Contrats d'interface (voir docs/app-plan.md)
-- **Quentin** → schéma Supabase + tokens design system
-- **Adrien** → payload trigger Gamma + retour lien deck / statut HubSpot draft
-- **Alex** → trigger landing page + retour URL
+- **Vite + React 18 + TypeScript** (same toolchain as `../frontend`, so the team
+  only learns one build). `lucide-react` for icons.
+- **Polar design system** — Beacon ships a self-contained subset of the design
+  tokens (`src/beacon.css`, scoped to `.beacon`) taken from
+  `../knowledge/polar-design-system/colors_and_type.css`. Dark by default, with a
+  light toggle. No external CSS/font dependency, so the build stays clean.
 
-## Statut
-🚧 Scaffolding à venir. En attente des tokens Polar avant de figer le style.
+## What's here (v1 — single screen)
+
+`src/Beacon.tsx` — the whole screen:
+
+- **Topbar** — flame badge, week volumetry, `n/5 selected` progress, **Push
+  accounts** CTA, light/dark toggle.
+- **Table** (company grain) — Company · Contact (primary + `+N`) · Signals
+  (hover to expand the "why now") · Sales angle (persona × Polar use-case) ·
+  Decision.
+- **Select with a 5/5 cap** — at 5/5 the remaining rows lock.
+- **Push accounts** — each selected row shows an inline orchestration state, then
+  its Gamma / landing / HubSpot links.
+- **Account drawer** — click any row to see *all* contacts with their per-persona
+  sales angle, champion marker, email + phone, and a HubSpot deep link.
+
+## Data — currently mocked
+
+`src/data.ts` holds 8 fictional DTC/Shopify accounts (the same fixtures as the
+mock). This is where the real feed plugs in.
+
+- **Quentin** → Supabase schema (Company + Contacts + Signals) that replaces
+  `ROWS` in `src/data.ts`; the `Company`/`Person`/`Signal` types there are the
+  first draft of that data contract.
+- **Adrien** → `Push accounts` payload → Gamma deck link + HubSpot draft status.
+- **Alex** → landing-page trigger → returned URL.
+
+Until then the Push flow is a simulated inline state (see `push()` in
+`Beacon.tsx`).
+
+## Not in v1 (later)
+
+- Live data wiring · post-push persistence · manager dashboard (`/pipeline`) ·
+  on-demand phone enrichment · Aeonik/Heldane webfonts (falls back to system now).
