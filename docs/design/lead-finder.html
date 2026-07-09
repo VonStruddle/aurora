@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Polar — Lead Finder (Weekly Hot Accounts)</title>
+<!-- Design system tokens, referenced directly (do not redefine) -->
+<link rel="stylesheet" href="../../knowledge/polar-design-system/colors_and_type.css">
+<script src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 14px;
+  }
+  .app { display: flex; height: 100vh; }
+
+  main { display: flex; flex-direction: column; min-width: 0; width: 100%; overflow: hidden; }
+
+  /* ---------- Topbar ---------- */
+  .topbar {
+    display: flex; align-items: center; gap: 16px;
+    padding: 14px 24px; border-bottom: 1px solid var(--border);
+    background: var(--bg-elev);
+  }
+  .tb-left { display: flex; align-items: center; gap: 12px; }
+  .flame-badge {
+    width: 40px; height: 40px; border-radius: 11px;
+    background: rgba(248,119,0,0.14); color: var(--warning);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .flame-badge svg { width: 20px; height: 20px; }
+  .tb-title { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+  .tb-sub { font-size: 12.5px; color: var(--fg-muted); margin-top: 1px; }
+  .tb-sub b { color: var(--fg); font-weight: 500; }
+  .tb-right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+
+  .progress { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--fg-muted); }
+  .progress .n { color: var(--fg); font-weight: 600; font-feature-settings: "tnum"; }
+  .pbar { width: 84px; height: 6px; border-radius: 50rem; background: var(--border); overflow: hidden; }
+  .pfill { height: 100%; width: 0%; background: var(--accent); border-radius: 50rem; transition: width 220ms ease-out; }
+
+  .btn-primary {
+    background: var(--primary); color: #fff; border: none;
+    border-radius: 10px; padding: 10px 16px; font-size: 13.5px; font-weight: 500;
+    font-family: var(--font-sans); cursor: pointer;
+    display: inline-flex; align-items: center; gap: 8px; transition: background 150ms, transform 80ms;
+  }
+  .btn-primary svg { width: 16px; height: 16px; }
+  .btn-primary:hover:not(:disabled) { background: var(--primary-110); }
+  .btn-primary:active:not(:disabled) { transform: scale(0.97); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .theme-btn {
+    width: 34px; height: 34px; border-radius: 9px; cursor: pointer;
+    background: transparent; border: 1px solid var(--border); color: var(--fg-muted);
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .theme-btn svg { width: 16px; height: 16px; }
+  .theme-btn:hover { color: var(--fg); }
+
+  /* ---------- Table ---------- */
+  .scroll { flex: 1; overflow: auto; padding: 8px 24px 32px; }
+  table.lf { width: 100%; border-collapse: collapse; }
+  table.lf thead th {
+    text-align: left; font-size: 11px; font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.10em; color: var(--fg-muted);
+    padding: 10px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0;
+    background: var(--bg); z-index: 2;
+  }
+  table.lf tbody td { padding: 16px; border-bottom: 1px solid var(--border); vertical-align: top; }
+  tbody tr.acct { transition: background 150ms; }
+  tbody tr.acct:hover { background: var(--bg-elev); }
+  tbody tr.acct.selected { background: rgba(84,51,251,0.08); }
+  tbody tr.acct.selected td:first-child { box-shadow: inset 3px 0 0 var(--primary); }
+  tbody tr.acct.locked { opacity: 0.38; }
+  tbody tr.acct.locked:hover { background: transparent; }
+
+  /* Company cell */
+  .company { display: flex; gap: 12px; min-width: 210px; }
+  .logo { width: 34px; height: 34px; border-radius: 9px; flex: none; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: #fff; }
+  .co-top { display: flex; align-items: center; gap: 7px; }
+  .co-name { font-weight: 600; font-size: 14px; letter-spacing: -0.005em; }
+  .heat { display: inline-flex; align-items: center; }
+  .heat svg { width: 14px; height: 14px; }
+  .heat.hot { color: var(--warning); }
+  .heat.warm { color: var(--fg-muted); }
+  .co-meta { font-size: 12px; color: var(--fg-muted); margin-top: 3px; display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .cc { border: 1px solid var(--border); border-radius: 4px; padding: 0 4px; font-size: 10.5px; font-weight: 500; letter-spacing: 0.02em; color: var(--fg-muted); }
+
+  /* Contact cell */
+  .contact { min-width: 210px; }
+  .ct-top { display: flex; align-items: center; gap: 7px; }
+  .ct-name { font-weight: 500; font-size: 13.5px; }
+  .crown { color: var(--accent); display: inline-flex; }
+  .crown svg { width: 14px; height: 14px; }
+  .plus { font-size: 11px; font-weight: 600; color: var(--link); background: rgba(84,51,251,0.12); border-radius: 50rem; padding: 1px 7px; }
+  .ct-title { font-size: 12.5px; color: var(--fg); margin-top: 3px; }
+  .ct-more { display: inline-flex; align-items: center; gap: 3px; font-size: 12px; font-weight: 500; color: var(--link); margin-top: 7px; }
+  .ct-more svg { width: 13px; height: 13px; transition: transform 150ms; }
+  tr.acct:hover .ct-more svg { transform: translateX(2px); }
+
+  /* Signals cell */
+  .signals { position: relative; }
+  .sig-pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); border-radius: 50rem; padding: 4px 10px; font-size: 12.5px; font-weight: 600; font-feature-settings: "tnum"; cursor: default; color: var(--fg); }
+  .sig-pill svg { width: 13px; height: 13px; color: var(--accent); }
+  .sig-pop {
+    position: absolute; top: calc(100% + 8px); left: 0; z-index: 20; width: 260px;
+    background: var(--bg-elev); border: 1px solid var(--border); border-radius: 12px;
+    box-shadow: var(--shadow-pop); padding: 10px; display: none;
+  }
+  .signals:hover .sig-pop { display: block; }
+  .sig-pop .sig-line { display: flex; gap: 8px; align-items: flex-start; padding: 6px 6px; font-size: 12.5px; color: var(--fg); }
+  .sig-pop .sig-line svg { width: 14px; height: 14px; flex: none; margin-top: 1px; color: var(--fg-muted); }
+  .sig-pop .sig-line em { color: var(--fg-muted); font-style: normal; }
+
+  /* Sales angle cell */
+  .angle { max-width: 400px; }
+  .angle-txt { font-size: 13px; line-height: 1.5; color: var(--fg-muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .angle-tag { display: inline-block; margin-bottom: 5px; font-size: 10.5px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.08em; color: var(--link); }
+
+  /* Decision cell */
+  .decision { width: 118px; }
+  .select-btn {
+    width: 100%; border-radius: 9px; padding: 8px 12px; font-size: 13px; font-weight: 500;
+    font-family: var(--font-sans); cursor: pointer; transition: all 120ms;
+    background: transparent; border: 1px solid var(--border); color: var(--fg);
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .select-btn svg { width: 15px; height: 15px; }
+  .select-btn:hover { border-color: var(--link); color: var(--link); }
+  tr.selected .select-btn { background: var(--primary); border-color: var(--primary); color: #fff; }
+  tr.selected .select-btn:hover { background: var(--primary-110); }
+  tr.locked .select-btn { cursor: not-allowed; }
+  tr.locked .select-btn:hover { border-color: var(--border); color: var(--fg); }
+
+  /* Orchestration detail row */
+  tr.detailrow > td { padding: 0 16px; border-bottom: 1px solid var(--border); }
+  .orch { display: flex; align-items: center; gap: 18px; padding: 12px 4px 14px; font-size: 12.5px; }
+  .orch .lead { color: var(--fg-muted); display: inline-flex; align-items: center; gap: 8px; }
+  .orch .lead svg { width: 15px; height: 15px; }
+  .spin { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--link); border-radius: 50%; animation: sp 700ms linear infinite; }
+  @keyframes sp { to { transform: rotate(360deg); } }
+  .asset { display: inline-flex; align-items: center; gap: 7px; color: var(--fg); }
+  .asset svg { width: 15px; height: 15px; }
+  .asset.done svg { color: var(--accent); }
+  .asset.pending { color: var(--fg-muted); }
+  .asset a { color: var(--link); text-decoration: none; }
+  .asset a:hover { text-decoration: underline; }
+
+  /* Row is clickable → opens the account drawer */
+  tbody tr.acct { cursor: pointer; }
+
+  /* Persona tags */
+  .ptag { font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.07em; padding: 2px 8px; border-radius: 50rem; white-space: nowrap; }
+  .ptag.founder    { color: var(--link);       background: rgba(84,51,251,0.14); }
+  .ptag.marketing  { color: var(--lagoon-200); background: var(--lagoon-bg); }
+  .ptag.ecommerce  { color: var(--anis-deep);  background: var(--anis-bg); }
+  .ptag.retention  { color: var(--lilas-200);  background: var(--lilas-bg); }
+  .ptag.finance    { color: var(--warning);    background: var(--pineapple-bg); }
+  .ptag.data       { color: var(--granit-200); background: var(--granit-bg); }
+
+  /* ---------- Account drawer ---------- */
+  .backdrop { position: fixed; inset: 0; background: rgba(8,8,10,0.55); backdrop-filter: blur(2px); opacity: 0; pointer-events: none; transition: opacity 200ms; z-index: 40; }
+  .backdrop.open { opacity: 1; pointer-events: auto; }
+  .drawer { position: fixed; top: 0; right: 0; height: 100vh; width: 540px; max-width: 94vw; background: var(--bg); border-left: 1px solid var(--border); transform: translateX(100%); transition: transform 260ms cubic-bezier(0.2,0.8,0.2,1); z-index: 50; display: flex; flex-direction: column; }
+  .drawer.open { transform: none; }
+
+  .dr-head { padding: 22px 24px 18px; border-bottom: 1px solid var(--border); }
+  .dr-row { display: flex; align-items: center; gap: 12px; }
+  .dr-name { font-weight: 700; font-size: 18px; letter-spacing: -0.01em; }
+  .dr-close { margin-left: auto; width: 32px; height: 32px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--fg-muted); cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+  .dr-close:hover { color: var(--fg); }
+  .dr-close svg { width: 16px; height: 16px; }
+  .dr-meta { font-size: 12.5px; color: var(--fg-muted); margin-top: 8px; display: flex; gap: 7px; align-items: center; flex-wrap: wrap; }
+  .dr-actions { display: flex; gap: 10px; margin-top: 16px; }
+  .dr-hs { display: inline-flex; align-items: center; gap: 7px; font-size: 12.5px; color: var(--link); text-decoration: none; border: 1px solid var(--border); border-radius: 9px; padding: 8px 12px; }
+  .dr-hs:hover { text-decoration: underline; }
+  .dr-hs svg { width: 14px; height: 14px; }
+  .dr-select { border-radius: 9px; padding: 8px 16px; font-size: 13px; font-weight: 500; font-family: var(--font-sans); cursor: pointer; background: transparent; border: 1px solid var(--border); color: var(--fg); display: inline-flex; align-items: center; gap: 7px; }
+  .dr-select svg { width: 15px; height: 15px; }
+  .dr-select:hover { border-color: var(--link); color: var(--link); }
+  .dr-select.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+  .dr-select.on:hover { background: var(--primary-110); color: #fff; }
+  .dr-select:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .dr-count { font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; color: var(--fg-muted); padding: 18px 24px 2px; }
+  .dr-body { overflow: auto; flex: 1; padding: 0 24px 28px; }
+  .person { padding: 16px 0; border-bottom: 1px solid var(--border); }
+  .person:last-child { border-bottom: none; }
+  .p-main { min-width: 0; }
+  .p-top { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .p-name { font-weight: 600; font-size: 14px; }
+  .p-crown { color: var(--accent); display: inline-flex; }
+  .p-crown svg { width: 14px; height: 14px; }
+  .p-title { font-size: 12.5px; color: var(--fg); margin-top: 3px; }
+  .p-contact { display: flex; gap: 14px; margin-top: 9px; font-size: 12px; color: var(--fg-muted); flex-wrap: wrap; }
+  .p-contact span { display: inline-flex; align-items: center; gap: 6px; }
+  .p-contact svg { width: 13px; height: 13px; }
+  .p-angle { margin-top: 10px; font-size: 12.5px; line-height: 1.5; color: var(--fg-muted); border-left: 2px solid var(--border); padding-left: 11px; }
+</style>
+</head>
+<body>
+<div class="app">
+  <main>
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="tb-left">
+        <span class="flame-badge"><i data-lucide="flame"></i></span>
+        <div>
+          <div class="tb-title">Lead Finder</div>
+          <div class="tb-sub"><b>10 companies</b> · 18 contacts · Week of Jul 7</div>
+        </div>
+      </div>
+      <div class="tb-right">
+        <button class="theme-btn" id="themeBtn" title="Toggle light / dark"><i data-lucide="sun"></i></button>
+        <div class="progress"><span class="n" id="count">0</span>/5 selected
+          <div class="pbar"><div class="pfill" id="pfill"></div></div>
+        </div>
+        <button class="btn-primary" id="pushBtn" disabled><i data-lucide="rocket"></i> Push accounts (<span id="pushN">0</span>)</button>
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="scroll" style="padding-top:16px">
+      <table class="lf">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Contact</th>
+            <th>Signals</th>
+            <th>Sales angle</th>
+            <th style="text-align:right">Decision</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <!-- rows injected -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<!-- Account drawer -->
+<div class="backdrop" id="backdrop"></div>
+<aside class="drawer" id="drawer" aria-hidden="true">
+  <div class="dr-head" id="drHead"></div>
+  <div class="dr-count" id="drCount"></div>
+  <div class="dr-body" id="drBody"></div>
+</aside>
+
+<script>
+const ROWS = [
+  {
+    logo:"E", color:"#5433FB", name:"Everbloom", score:"hot",
+    sector:"Skincare & beauty", size:"48", cc:"US", domain:"everbloom.co",
+    signals:[
+      ["user-plus","New CFO hired","2 weeks ago"],
+      ["trending-up","Meta spend +60% QoQ","Storeleads"],
+      ["shopping-bag","Moved to Shopify Plus",""],
+      ["briefcase","Hiring: Sr. Growth Manager",""]
+    ],
+    people:[
+      {name:"Dana Whitfield", title:"Founder & CEO", persona:"Founder", champion:true, email:"dana@everbloom.co", phone:"+1 (512) 555-0148",
+       angle:"Decides fast and alone. Lead with one profit-legible source of truth — blended MER, real CAC and payback — she can run herself."},
+      {name:"Liam Ortega", title:"VP Marketing", persona:"Marketing", champion:false, email:"liam@everbloom.co", phone:"+1 (512) 555-0192",
+       angle:"Owns paid across Meta and Google. Lead with first-party attribution and blended ROAS by channel."},
+      {name:"Sana Reyes", title:"Head of Retention", persona:"Retention", champion:false, email:"sana@everbloom.co", phone:"+1 (512) 555-0173",
+       angle:"Building Klaviyo flows now. Lead with cohort LTV and enriched audiences to recover missed flow revenue."}
+    ]
+  },
+  {
+    logo:"F", color:"#00BC84", name:"Fjord Supply", score:"hot",
+    sector:"Outdoor apparel", size:"120", cc:"US", domain:"fjordsupply.com",
+    signals:[
+      ["user-plus","Head of Growth started","3 weeks ago"],
+      ["swords","Evaluating Northbeam","competitor"],
+      ["trending-up","Traffic +38% QoQ",""]
+    ],
+    people:[
+      {name:"Marcus Lindqvist", title:"Head of Growth", persona:"Marketing", champion:true, email:"marcus@fjordsupply.com", phone:"+1 (303) 555-0121",
+       angle:"New in seat, inheriting an unproven attribution stack. Lead with first-party attribution and Causal Lift he can forward to the CEO."},
+      {name:"Erin Walsh", title:"Chief Marketing Officer", persona:"Marketing", champion:false, email:"erin@fjordsupply.com", phone:"+1 (303) 555-0188",
+       angle:"Defends spend to the board. Lead with incrementality-backed ROAS, not platform-reported numbers."},
+      {name:"Cole Barrett", title:"Ecommerce Manager", persona:"Ecommerce", champion:false, email:"cole@fjordsupply.com", phone:"+1 (303) 555-0164",
+       angle:"Runs the store day to day. Lead with daily revenue movement and SKU-level performance."},
+      {name:"Nadia Improta", title:"Data Analyst", persona:"Data", champion:false, email:"nadia@fjordsupply.com", phone:"+1 (303) 555-0139",
+       angle:"Owns reporting. Lead with the semantic layer and Polar MCP — governed data, no black boxes."}
+    ]
+  },
+  {
+    logo:"N", color:"#F87700", name:"Nectar Wellness", score:"hot",
+    sector:"Supplements", size:"65", cc:"UK", domain:"nectarwellness.com",
+    signals:[
+      ["user-plus","CMO joined","4 weeks ago"],
+      ["briefcase","Hiring 2 performance roles",""],
+      ["swords","Using Triple Whale","competitor"],
+      ["gauge","Est. GMV $14M",""],
+      ["trending-up","Ramping Meta spend",""]
+    ],
+    people:[
+      {name:"Priya Anand", title:"Chief Marketing Officer", persona:"Marketing", champion:true, email:"priya@nectarwellness.com", phone:"+44 20 7946 0114",
+       angle:"One month in, defending spend to the board. Lead with defensible channel ROAS and incrementality."},
+      {name:"Tom Fielding", title:"Performance Marketing Manager", persona:"Marketing", champion:false, email:"tom@nectarwellness.com", phone:"+44 20 7946 0177",
+       angle:"In the ad accounts daily. Lead with AI Media Buyer spend recommendations and creative performance."}
+    ]
+  },
+  {
+    logo:"R", color:"#9542FE", name:"Roam Coffee", score:"warm",
+    sector:"Food & beverage", size:"34", cc:"CA", domain:"roamcoffee.co",
+    signals:[
+      ["repeat","Launched subscription",""],
+      ["trending-up","Repeat rate +12%",""]
+    ],
+    people:[
+      {name:"Théo Brunel", title:"Co-Founder", persona:"Founder", champion:true, email:"theo@roamcoffee.co", phone:"+1 (514) 555-0143",
+       angle:"Just launched subscription. Lead with cohort LTV and repeat-purchase gaps to protect the new recurring base."}
+    ]
+  },
+  {
+    logo:"M", color:"#3F9FF8", name:"Meridian Apparel", score:"hot",
+    sector:"Fashion", size:"210", cc:"US", domain:"meridianapparel.com",
+    signals:[
+      ["shopping-bag","Migrated to Shopify Plus",""],
+      ["boxes","Expanding to Amazon",""],
+      ["briefcase","Hiring Ecommerce Analyst",""]
+    ],
+    people:[
+      {name:"Sarah Klein", title:"Head of Ecommerce", persona:"Ecommerce", champion:true, email:"sarah@meridianapparel.com", phone:"+1 (212) 555-0155",
+       angle:"Running Shopify Plus into Amazon. Lead with daily store performance and an omnichannel roll-up."},
+      {name:"Gina Marsh", title:"Chief Marketing Officer", persona:"Marketing", champion:false, email:"gina@meridianapparel.com", phone:"+1 (212) 555-0198",
+       angle:"Owns channel mix. Lead with blended MER and incrementality across Meta, Google and TikTok."},
+      {name:"Dev Patel", title:"Head of CRM", persona:"Retention", champion:false, email:"dev@meridianapparel.com", phone:"+1 (212) 555-0126",
+       angle:"Owns email and SMS. Lead with cohort retention curves and Klaviyo audience enrichment."},
+      {name:"Marco Ferri", title:"Inventory & Ops Manager", persona:"Ecommerce", champion:false, email:"marco@meridianapparel.com", phone:"+1 (212) 555-0171",
+       angle:"Stock is the constraint. Lead with the AI Inventory Planner — reorder timing and overstock alerts."},
+      {name:"Alicia Gomez", title:"FP&A Manager", persona:"Finance", champion:false, email:"alicia@meridianapparel.com", phone:"+1 (212) 555-0109",
+       angle:"Quantifies before believing. Lead with contribution margin, CAC payback and a governed CFO view."}
+    ]
+  },
+  {
+    logo:"H", color:"#F038F3", name:"Halcyon Skincare", score:"warm",
+    sector:"Beauty", size:"52", cc:"AU", domain:"halcyonskin.com",
+    signals:[
+      ["gauge","Est. GMV $8M",""],
+      ["trending-up","Traffic +22% QoQ",""]
+    ],
+    people:[
+      {name:"Emma Doyle", title:"Founder", persona:"Founder", champion:true, email:"emma@halcyonskin.com", phone:"+61 2 5550 0132",
+       angle:"Profitable but flying blind across Shopify, Meta and Klaviyo. Lead with a consolidated profit view she can read every morning without an analyst."},
+      {name:"Ruby Chen", title:"Marketing Manager", persona:"Marketing", champion:false, email:"ruby@halcyonskin.com", phone:"+61 2 5550 0187",
+       angle:"Scaling paid on a lean team. Lead with channel ROAS clarity and dynamic alerts."}
+    ]
+  },
+  {
+    logo:"O", color:"#5A50FE", name:"Ovation Pet", score:"warm",
+    sector:"Pet food", size:"88", cc:"US", domain:"ovationpet.com",
+    signals:[
+      ["swords","Testing a competitor tool","competitor"],
+      ["trending-up","Meta spend +30% QoQ",""]
+    ],
+    people:[
+      {name:"Dana Ruiz", title:"VP Marketing", persona:"Marketing", champion:false, email:"dana@ovationpet.com", phone:"+1 (503) 555-0146",
+       angle:"Scaling paid with no incrementality read. Lead with twin-geo Causal Lift to prove which spend drives new customers."},
+      {name:"Greg Hollis", title:"CEO", persona:"Founder", champion:true, email:"greg@ovationpet.com", phone:"+1 (503) 555-0191",
+       angle:"Owner-operator watching cash. Lead with real CAC, payback and one profit view he can trust."},
+      {name:"Priti Shah", title:"Ecommerce Lead", persona:"Ecommerce", champion:false, email:"priti@ovationpet.com", phone:"+1 (503) 555-0168",
+       angle:"Owns store performance. Lead with daily revenue movement and bought-together bundle analysis."}
+    ]
+  },
+  {
+    logo:"L", color:"#04AB7D", name:"Larkspur & Co", score:"warm",
+    sector:"Home goods", size:"41", cc:"US", domain:"larkspurco.com",
+    signals:[
+      ["shopping-bag","Replatformed to Shopify",""],
+      ["trending-up","Traffic +18% QoQ",""]
+    ],
+    people:[
+      {name:"Nathan Cole", title:"Head of DTC", persona:"Ecommerce", champion:false, email:"nathan@larkspurco.com", phone:"+1 (312) 555-0134",
+       angle:"Growing DTC alongside wholesale. Lead with SKU performance and bought-together bundles to lift AOV."},
+      {name:"Beth Alvarez", title:"Marketing Director", persona:"Marketing", champion:false, email:"beth@larkspurco.com", phone:"+1 (312) 555-0176",
+       angle:"Owns acquisition. Lead with first-party attribution and blended ROAS by channel."}
+    ]
+  }
+];
+// Collapsed-row summary derives from the primary contact (people[0])
+ROWS.forEach(r => {
+  const p = r.people[0];
+  r.contact = p.name; r.title = p.title; r.champion = p.champion;
+  r.more = r.people.length - 1;
+  r.persona = p.persona + " angle"; r.angle = p.angle;
+});
+
+const MAX = 5;
+const selected = new Set();
+const tbody = document.getElementById('tbody');
+
+function sigLines(sig){
+  return sig.map(s => `<div class="sig-line"><i data-lucide="${s[0]}"></i><div>${s[1]}${s[2] ? ` · <em>${s[2]}</em>` : ''}</div></div>`).join('');
+}
+
+ROWS.forEach((r, i) => {
+  const tr = document.createElement('tr');
+  tr.className = 'acct';
+  tr.dataset.i = i;
+  tr.innerHTML = `
+    <td>
+      <div class="company">
+        <div class="logo" style="background:${r.color}">${r.logo}</div>
+        <div>
+          <div class="co-top">
+            <span class="co-name">${r.name}</span>
+            <span class="heat ${r.score}" title="${r.score === 'hot' ? 'Hot account' : 'Warm account'}"><i data-lucide="flame"></i></span>
+          </div>
+          <div class="co-meta">${r.sector} <span>·</span> <i data-lucide="users" style="width:12px;height:12px"></i> ${r.size} <span class="cc">${r.cc}</span></div>
+        </div>
+      </div>
+    </td>
+    <td>
+      <div class="contact">
+        <div class="ct-top">
+          <span class="ct-name">${r.contact}</span>
+          ${r.champion ? '<span class="crown" title="Champion / decision-maker"><i data-lucide="crown"></i></span>' : ''}
+          ${r.more ? `<span class="plus">+${r.more}</span>` : ''}
+        </div>
+        <div class="ct-title">${r.title}</div>
+        <div class="ct-more">${r.more > 0 ? `View all ${r.people.length} contacts` : 'View contact details'} <i data-lucide="chevron-right"></i></div>
+      </div>
+    </td>
+    <td>
+      <div class="signals">
+        <span class="sig-pill"><i data-lucide="activity"></i> ${r.signals.length}</span>
+        <div class="sig-pop">${sigLines(r.signals)}</div>
+      </div>
+    </td>
+    <td>
+      <div class="angle">
+        <span class="angle-tag">${r.persona}</span>
+        <div class="angle-txt" title="${r.angle}">${r.angle}</div>
+      </div>
+    </td>
+    <td class="decision">
+      <button class="select-btn" onclick="toggle(${i})"><i data-lucide="plus"></i> Select</button>
+    </td>`;
+  tbody.appendChild(tr);
+
+  const detail = document.createElement('tr');
+  detail.className = 'detailrow';
+  detail.dataset.detail = i;
+  detail.hidden = true;
+  detail.innerHTML = `<td colspan="5"><div class="orch" id="orch-${i}"></div></td>`;
+  tbody.appendChild(detail);
+
+  tr.addEventListener('click', (e) => {
+    if (e.target.closest('.select-btn')) return;   // let the Select button do its thing
+    openDrawer(i);
+  });
+});
+
+function refresh(){
+  const n = selected.size;
+  document.getElementById('count').textContent = n;
+  document.getElementById('pushN').textContent = n;
+  document.getElementById('pfill').style.width = (n / MAX * 100) + '%';
+  const push = document.getElementById('pushBtn');
+  push.disabled = n === 0;
+
+  document.querySelectorAll('tr.acct').forEach(tr => {
+    const i = +tr.dataset.i;
+    const isSel = selected.has(i);
+    tr.classList.toggle('selected', isSel);
+    tr.classList.toggle('locked', n >= MAX && !isSel);
+    const btn = tr.querySelector('.select-btn');
+    if (isSel) btn.innerHTML = '<i data-lucide="check"></i> Selected';
+    else if (n >= MAX) btn.innerHTML = '<i data-lucide="lock"></i> Locked';
+    else btn.innerHTML = '<i data-lucide="plus"></i> Select';
+  });
+  updateDrawerBtn();
+  lucide.createIcons();
+}
+
+function toggle(i){
+  if (selected.has(i)) selected.delete(i);
+  else { if (selected.size >= MAX) return; selected.add(i); }
+  refresh();
+}
+
+document.getElementById('pushBtn').addEventListener('click', () => {
+  if (selected.size === 0) return;
+  document.getElementById('pushBtn').disabled = true;
+  selected.forEach(i => orchestrate(i));
+});
+
+function orchestrate(i){
+  const detail = document.querySelector(`tr[data-detail="${i}"]`);
+  const orch = document.getElementById('orch-' + i);
+  detail.hidden = false;
+  orch.innerHTML = `<span class="lead"><span class="spin"></span> Orchestrating ${ROWS[i].name}…</span>
+    <span class="asset pending"><i data-lucide="presentation"></i> Gamma deck</span>
+    <span class="asset pending"><i data-lucide="layout"></i> Landing page</span>
+    <span class="asset pending"><i data-lucide="mail"></i> HubSpot draft</span>`;
+  lucide.createIcons();
+  setTimeout(() => {
+    orch.innerHTML = `<span class="lead" style="color:var(--accent)"><i data-lucide="check-circle-2"></i> ${ROWS[i].name} pushed</span>
+      <span class="asset done"><i data-lucide="presentation"></i> <a href="#">Gamma deck ›</a></span>
+      <span class="asset done"><i data-lucide="layout"></i> <a href="#">Landing page ›</a></span>
+      <span class="asset done"><i data-lucide="mail"></i> <a href="#">HubSpot draft ›</a></span>
+      <span class="asset done"><i data-lucide="external-link"></i> <a href="#">Open in HubSpot ›</a></span>`;
+    lucide.createIcons();
+  }, 1600 + i * 250);
+}
+
+// ---------- Account drawer ----------
+let currentDrawer = null;
+
+function openDrawer(i){
+  currentDrawer = i;
+  const r = ROWS[i];
+  document.getElementById('drHead').innerHTML = `
+    <div class="dr-row">
+      <div class="logo" style="background:${r.color}">${r.logo}</div>
+      <span class="dr-name">${r.name}</span>
+      <span class="heat ${r.score}"><i data-lucide="flame"></i></span>
+      <button class="dr-close" onclick="closeDrawer()"><i data-lucide="x"></i></button>
+    </div>
+    <div class="dr-meta">${r.sector} <span>·</span> <i data-lucide="users" style="width:13px;height:13px"></i> ${r.size} employees <span class="cc">${r.cc}</span></div>
+    <div class="dr-actions">
+      <button class="dr-select" id="drSelect" onclick="toggle(${i})"></button>
+      <a class="dr-hs" href="#"><i data-lucide="external-link"></i> Open account in HubSpot</a>
+    </div>`;
+
+  document.getElementById('drCount').textContent = `${r.people.length} contact${r.people.length > 1 ? 's' : ''} · with sales angle`;
+
+  document.getElementById('drBody').innerHTML = r.people.map((p, idx) => `
+    <div class="person" id="person-${i}-${idx}">
+      <div class="p-main">
+        <div class="p-top">
+          <span class="p-name">${p.name}</span>
+          ${p.champion ? '<span class="p-crown" title="Champion / decision-maker"><i data-lucide="crown"></i></span>' : ''}
+          <span class="ptag ${p.persona.toLowerCase()}">${p.persona}</span>
+        </div>
+        <div class="p-title">${p.title}</div>
+        <div class="p-contact">
+          <span><i data-lucide="mail"></i> ${p.email}</span>
+          <span><i data-lucide="phone"></i> ${p.phone}</span>
+        </div>
+        <div class="p-angle">${p.angle}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('backdrop').classList.add('open');
+  updateDrawerBtn();
+  lucide.createIcons();
+}
+
+function closeDrawer(){
+  currentDrawer = null;
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('backdrop').classList.remove('open');
+}
+
+function updateDrawerBtn(){
+  if (currentDrawer === null) return;
+  const btn = document.getElementById('drSelect');
+  if (!btn) return;
+  const i = currentDrawer;
+  const isSel = selected.has(i);
+  const locked = !isSel && selected.size >= MAX;
+  btn.classList.toggle('on', isSel);
+  btn.disabled = locked;
+  if (isSel) btn.innerHTML = '<i data-lucide="check"></i> Selected';
+  else if (locked) btn.innerHTML = '<i data-lucide="lock"></i> Locked (5/5)';
+  else btn.innerHTML = '<i data-lucide="plus"></i> Select account';
+}
+
+document.getElementById('backdrop').addEventListener('click', closeDrawer);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+// Theme toggle
+document.getElementById('themeBtn').addEventListener('click', () => {
+  const light = document.documentElement.getAttribute('data-theme') === 'light';
+  if (light) { document.documentElement.removeAttribute('data-theme'); document.getElementById('themeBtn').innerHTML = '<i data-lucide="sun"></i>'; }
+  else { document.documentElement.setAttribute('data-theme', 'light'); document.getElementById('themeBtn').innerHTML = '<i data-lucide="moon"></i>'; }
+  lucide.createIcons();
+});
+
+lucide.createIcons();
+refresh();
+</script>
+</body></html>
