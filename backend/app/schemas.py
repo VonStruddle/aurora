@@ -58,6 +58,21 @@ class CompaniesPage(BaseModel):
     has_more: bool
 
 
+class HubSpotSyncRequest(BaseModel):
+    """Which target accounts to push. When `domains` is omitted, every account
+    in `hackathon_target_accounts` is synced."""
+
+    domains: list[str] | None = None
+
+
+class HubSpotSyncResult(BaseModel):
+    companies_synced: int
+    contacts_synced: int
+    # Contacts skipped because they have no email (can't upsert by email idProperty).
+    contacts_skipped_no_email: int
+    associations_created: int
+
+
 class TamTier(BaseModel):
     """Total GMV (TAM) contribution of one SOM tier."""
 

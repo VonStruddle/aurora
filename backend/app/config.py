@@ -39,6 +39,10 @@ class Settings(BaseSettings):
     anthropic_api_key: str = ""
     anthropic_model: str = "claude-haiku-4-5-20251001"
 
+    # --- HubSpot (private-app token; Bearer auth against api.hubapi.com) ---
+    hubspot_access_token: str = ""
+    hubspot_client_secret: str = ""
+
     @property
     def supabase_api_key(self) -> str:
         return self.supabase_service_role_key or self.supabase_key or self.supabase_anon_key
@@ -56,6 +60,10 @@ class Settings(BaseSettings):
         return bool(
             self.snowflake_account and self.snowflake_user and self.snowflake_private_key
         )
+
+    @property
+    def hubspot_configured(self) -> bool:
+        return bool(self.hubspot_access_token)
 
     @property
     def items_table(self) -> str:
